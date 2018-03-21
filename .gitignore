@@ -17,5 +17,11 @@
 Thumbs.db
 
 # Build output
-**/obj/
-**/bin/
+obj/
+bin/
+
+# Personal files
+**/*.csproj.user
+
+# Deployment definition
+*Web Deploy.pubxml*

@@ -66,8 +66,14 @@
 
         protected override async Task OnInitAsync()
         {
-            var s = await Http.GetStringAsync("https://conduit.productionready.io/api/articles");
-            articles = new Article[] { new Article { Title = s } };
+            var json = await Http.GetStringAsync("https://conduit.productionready.io/api/articles");
+            var articleData = Newtonsoft.Json.JsonConvert.DeserializeObject<ArticleData>(json);
+            articles = articleData.Articles;
+        }
+
+        class ArticleData
+        {
+            public Article[] Articles { get; set; }
         }
 
         class Article

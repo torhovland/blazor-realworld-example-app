@@ -35,7 +35,7 @@
                             </button>
                         </div>
                         <a href="" class="preview-link">
-                            <h1>@article.Title</h1>
+                            <h1>@article.title</h1>
                             <p>This is the description for the post.</p>
                             <span>Read more...</span>
                         </a>
@@ -66,18 +66,17 @@
 
         protected override async Task OnInitAsync()
         {
-            var json = await Http.GetStringAsync("https://conduit.productionready.io/api/articles");
-            var articleData = Newtonsoft.Json.JsonConvert.DeserializeObject<ArticleData>(json);
-            articles = articleData.Articles;
+            var articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles");
+            articles = articleData.articles;
         }
 
         class ArticleData
         {
-            public Article[] Articles { get; set; }
+            public Article[] articles { get; set; }
         }
 
         class Article
         {
-            public string Title { get; set; }
+            public string title { get; set; }
         }
     }

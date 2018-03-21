@@ -10,8 +10,12 @@
 .classpath
 *.launch
 .settings/
+.vs
 
-
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
+
+# Build output
+**/obj/
+**/bin/

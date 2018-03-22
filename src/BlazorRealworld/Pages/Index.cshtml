@@ -21,7 +21,7 @@
                             </li>
                         </ul>
                     </div>
-                    @foreach (var article in articles)
+                    @foreach (var article in articleData.articles ?? new Article[0])
                     {
                         var date = article.createdAt;
 
@@ -49,14 +49,10 @@
                     <div class="sidebar">
                         <p>Popular Tags</p>
                         <div class="tag-list">
-                            <a href="" class="tag-pill tag-default">programming</a>
-                            <a href="" class="tag-pill tag-default">javascript</a>
-                            <a href="" class="tag-pill tag-default">emberjs</a>
-                            <a href="" class="tag-pill tag-default">angularjs</a>
-                            <a href="" class="tag-pill tag-default">react</a>
-                            <a href="" class="tag-pill tag-default">mean</a>
-                            <a href="" class="tag-pill tag-default">node</a>
-                            <a href="" class="tag-pill tag-default">rails</a>
+                            @foreach (var tag in tagData.tags ?? new string[0])
+                            {
+                                <a href="" class="tag-pill tag-default">@tag</a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -64,12 +60,13 @@
         </div>
     </div>
     @functions {
-        Article[] articles = new Article[0];
+        ArticleData articleData = new ArticleData();
+        TagData tagData = new TagData();
 
         protected override async Task OnInitAsync()
         {
-            var articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
-            articles = articleData.articles;
+            articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
+            tagData = await Http.GetJsonAsync<TagData>("https://conduit.productionready.io/api/tags");
         }
 
         class ArticleData
@@ -93,6 +90,11 @@
             public string image { get; set; }
         }
 
+        class TagData
+        {
+            public string[] tags { get; set; }
+        }
+
         static string Ordinal(int number)
         {
             var work = number.ToString();
@@ -106,5 +108,5 @@
                 default: work += "th"; break;
             }
             return work;
-        }   
+        }
     }

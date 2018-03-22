@@ -23,23 +23,25 @@
                     </div>
                     @foreach (var article in articles)
                     {
-                    <div class="article-preview">
-                        <div class="article-meta">
-                            <a href="profile.html"><img src="@article.author.image" /></a>
-                            <div class="info">
-                                <a href="/profile/@article.author.username" class="author">@article.author.username</a>
-                                <span class="date">@article.createdAt</span>
+                        var date = article.createdAt;
+
+                        <div class="article-preview">
+                            <div class="article-meta">
+                                <a href="profile.html"><img src="@article.author.image" /></a>
+                                <div class="info">
+                                    <a href="/profile/@article.author.username" class="author">@article.author.username</a>
+                                    <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                                    <i class="ion-heart"></i> @article.favoritesCount
+                                </button>
                             </div>
-                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                <i class="ion-heart"></i> @article.favoritesCount
-                            </button>
+                            <a href="/article/@article.slug" class="preview-link">
+                                <h1>@article.title</h1>
+                                <p>@article.description</p>
+                                <span>Read more...</span>
+                            </a>
                         </div>
-                        <a href="/article/@article.slug" class="preview-link">
-                            <h1>@article.title</h1>
-                            <p>@article.description</p>
-                            <span>Read more...</span>
-                        </a>
-                    </div>
                     }
 
                 </div>
@@ -83,7 +85,6 @@
             public string description { get; set; }
             public Author author { get; set; }
             public int favoritesCount { get; set; }
-
         }
 
         class Author
@@ -91,4 +92,19 @@
             public string username { get; set; }
             public string image { get; set; }
         }
+
+        static string Ordinal(int number)
+        {
+            var work = number.ToString();
+            if ((number % 100) == 11 || (number % 100) == 12 || (number % 100) == 13)
+                return work + "th";
+            switch (number % 10)
+            {
+                case 1: work += "st"; break;
+                case 2: work += "nd"; break;
+                case 3: work += "rd"; break;
+                default: work += "th"; break;
+            }
+            return work;
+        }   
     }

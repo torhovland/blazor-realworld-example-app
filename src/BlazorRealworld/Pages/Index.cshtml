@@ -66,7 +66,7 @@
 
         protected override async Task OnInitAsync()
         {
-            var articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles");
+            var articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
             articles = articleData.articles;
         }
 

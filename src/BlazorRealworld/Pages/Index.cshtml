@@ -51,7 +51,7 @@
                         <div class="tag-list">
                             @foreach (var tag in tagData.tags ?? new string[0])
                             {
-                                <a href="" class="tag-pill tag-default">@tag</a>
+                                <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
                             }
                         </div>
                     </div>
@@ -108,5 +108,10 @@
                 default: work += "th"; break;
             }
             return work;
+        }
+
+        async Task SelectTag(string tag)
+        {
+            articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
         }
     }

@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using System.Net.Http.Headers
 @inject HttpClient Http
+@inject AppState  AppState
 
 <div class="home-page">
     <div class="banner">
@@ -14,10 +16,10 @@
                 <div class="feed-toggle">
                     <ul class="nav nav-pills outline-active">
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="">Your Feed</a>
+                            <a class="nav-link @feedState" href="/" @onclick(async () => await FeedAsync())>Your Feed</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="">Global Feed</a>
+                            <a class="nav-link @globalState" href="/" @onclick(async () => await GlobalAsync())>Global Feed</a>
                         </li>
                     </ul>
                 </div>
@@ -63,11 +65,36 @@
 @functions {
     ArticleData articleData = new ArticleData();
     TagData tagData = new TagData();
+    string globalState;
+    string feedState;
 
     protected override async Task OnInitAsync()
     {
-        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
+        await GlobalAsync();
         tagData = await Http.GetJsonAsync<TagData>("https://conduit.productionready.io/api/tags");
+    }
+
+    async Task GlobalAsync()
+    {
+        globalState = "active";
+        feedState = "disabled";
+        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
+        StateHasChanged();
+    }
+
+    async Task FeedAsync()
+    {
+        feedState = "active";
+        globalState = "disabled";
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", AppState.User.token);
+        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles/feed?limit=10&offset=0");
+        StateHasChanged();
+    }
+
+    async Task SelectTag(string tag)
+    {
+        articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
+        StateHasChanged();
     }
 
     class ArticleData
@@ -109,10 +136,5 @@
             default: work += "th"; break;
         }
         return work;
-    }
-
-    async Task SelectTag(string tag)
-    {
-        articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
     }
 }

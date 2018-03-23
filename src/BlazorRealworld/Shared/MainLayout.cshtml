@@ -1,4 +1,5 @@
 ﻿@implements ILayoutComponent
+@inject AppState AppState
 
 <nav class="navbar navbar-light">
     <div class="container">
@@ -9,26 +10,32 @@
                     Home
                 </NavLink>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="ion-compose"></i>&nbsp;New Post
-                </a>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href=@("/settings")>
-                    <i class="ion-gear-a"></i>&nbsp;Settings
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href=@("/signin")>
-                    Sign in
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href=@("/signup")>
-                    Sign up
-                </NavLink>
-            </li>
+            @if (AppState.IsSignedIn)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="ion-compose"></i>&nbsp;New Post
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href=@("/settings")>
+                        <i class="ion-gear-a"></i>&nbsp;Settings
+                    </NavLink>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <NavLink class="nav-link" href=@("/signin")>
+                        Sign in
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href=@("/signup")>
+                        Sign up
+                    </NavLink>
+                </li>
+            }
         </ul>
     </div>
 </nav>

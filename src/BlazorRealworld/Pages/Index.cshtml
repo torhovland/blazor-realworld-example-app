@@ -1,117 +1,118 @@
 ﻿@page "/"
 @inject HttpClient Http
 
-    <div class="home-page">
-        <div class="banner">
-            <div class="container">
-                <h1 class="logo-font">conduit</h1>
-                <p>A place to share your knowledge.</p>
-            </div>
+<div class="home-page">
+    <div class="banner">
+        <div class="container">
+            <h1 class="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
         </div>
-        <div class="container page">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="feed-toggle">
-                        <ul class="nav nav-pills outline-active">
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="">Your Feed</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="">Global Feed</a>
-                            </li>
-                        </ul>
-                    </div>
-                    @foreach (var article in articleData.articles ?? new Article[0])
-                    {
-                        var date = article.createdAt;
-
-                        <div class="article-preview">
-                            <div class="article-meta">
-                                <a href="profile.html"><img src="@article.author.image" /></a>
-                                <div class="info">
-                                    <a href="/profile/@article.author.username" class="author">@article.author.username</a>
-                                    <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
-                                </div>
-                                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                    <i class="ion-heart"></i> @article.favoritesCount
-                                </button>
-                            </div>
-                            <a href="/article/@article.slug" class="preview-link">
-                                <h1>@article.title</h1>
-                                <p>@article.description</p>
-                                <span>Read more...</span>
-                            </a>
-                        </div>
-                    }
-
+    </div>
+    <div class="container page">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="feed-toggle">
+                    <ul class="nav nav-pills outline-active">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="">Your Feed</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="">Global Feed</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-md-3">
-                    <div class="sidebar">
-                        <p>Popular Tags</p>
-                        <div class="tag-list">
-                            @foreach (var tag in tagData.tags ?? new string[0])
-                            {
-                                <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
-                            }
+                @foreach (var article in articleData.articles ?? new Article[0])
+                {
+                    var date = article.createdAt;
+
+                    <div class="article-preview">
+                        <div class="article-meta">
+                            <a href="profile.html"><img src="@article.author.image" /></a>
+                            <div class="info">
+                                <a href="/profile/@article.author.username" class="author">@article.author.username</a>
+                                <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                                <i class="ion-heart"></i> @article.favoritesCount
+                            </button>
                         </div>
+                        <a href="/article/@article.slug" class="preview-link">
+                            <h1>@article.title</h1>
+                            <p>@article.description</p>
+                            <span>Read more...</span>
+                        </a>
+                    </div>
+                }
+
+            </div>
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <p>Popular Tags</p>
+                    <div class="tag-list">
+                        @foreach (var tag in tagData.tags ?? new string[0])
+                        {
+                            <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @functions {
-        ArticleData articleData = new ArticleData();
-        TagData tagData = new TagData();
+</div>
 
-        protected override async Task OnInitAsync()
-        {
-            articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
-            tagData = await Http.GetJsonAsync<TagData>("https://conduit.productionready.io/api/tags");
-        }
+@functions {
+    ArticleData articleData = new ArticleData();
+    TagData tagData = new TagData();
 
-        class ArticleData
-        {
-            public Article[] articles { get; set; }
-        }
-
-        class Article
-        {
-            public string title { get; set; }
-            public string slug { get; set; }
-            public DateTime createdAt { get; set; }
-            public string description { get; set; }
-            public Author author { get; set; }
-            public int favoritesCount { get; set; }
-        }
-
-        class Author
-        {
-            public string username { get; set; }
-            public string image { get; set; }
-        }
-
-        class TagData
-        {
-            public string[] tags { get; set; }
-        }
-
-        static string Ordinal(int number)
-        {
-            var work = number.ToString();
-            if ((number % 100) == 11 || (number % 100) == 12 || (number % 100) == 13)
-                return work + "th";
-            switch (number % 10)
-            {
-                case 1: work += "st"; break;
-                case 2: work += "nd"; break;
-                case 3: work += "rd"; break;
-                default: work += "th"; break;
-            }
-            return work;
-        }
-
-        async Task SelectTag(string tag)
-        {
-            articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
-        }
+    protected override async Task OnInitAsync()
+    {
+        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
+        tagData = await Http.GetJsonAsync<TagData>("https://conduit.productionready.io/api/tags");
     }
+
+    class ArticleData
+    {
+        public Article[] articles { get; set; }
+    }
+
+    class Article
+    {
+        public string title { get; set; }
+        public string slug { get; set; }
+        public DateTime createdAt { get; set; }
+        public string description { get; set; }
+        public Author author { get; set; }
+        public int favoritesCount { get; set; }
+    }
+
+    class Author
+    {
+        public string username { get; set; }
+        public string image { get; set; }
+    }
+
+    class TagData
+    {
+        public string[] tags { get; set; }
+    }
+
+    static string Ordinal(int number)
+    {
+        var work = number.ToString();
+        if ((number % 100) == 11 || (number % 100) == 12 || (number % 100) == 13)
+            return work + "th";
+        switch (number % 10)
+        {
+            case 1: work += "st"; break;
+            case 2: work += "nd"; break;
+            case 3: work += "rd"; break;
+            default: work += "th"; break;
+        }
+        return work;
+    }
+
+    async Task SelectTag(string tag)
+    {
+        articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
+    }
+}

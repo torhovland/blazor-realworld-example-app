@@ -1,6 +1,7 @@
 ﻿@page "/signin"
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject AppState AppState
 
 <div class="auth-page">
     <div class="container page">
@@ -12,9 +13,9 @@
                 </p>
                 @if (isError)
                 {
-                    <ul class="error-messages">
-                        <li>The email address or password is wrong.</li>
-                    </ul>
+                <ul class="error-messages">
+                    <li>The email address or password is wrong.</li>
+                </ul>
                 }
                 <form>
                     <fieldset class="form-group">
@@ -45,7 +46,10 @@
             });
 
         if (signInResponse.user != null)
+        {
+            AppState.Token = signInResponse.user.token;
             UriHelper.NavigateTo("/");
+        }
         else
         {
             isError = true;

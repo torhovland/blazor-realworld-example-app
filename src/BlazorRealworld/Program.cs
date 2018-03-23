@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace BlazorRealworld
@@ -10,7 +11,7 @@ namespace BlazorRealworld
         {
             var serviceProvider = new BrowserServiceProvider(configure =>
             {
-                // Add any custom services here
+                configure.Add(ServiceDescriptor.Singleton(new AppState()));
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

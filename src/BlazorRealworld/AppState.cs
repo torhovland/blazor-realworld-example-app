@@ -7,8 +7,14 @@ namespace BlazorRealworld
 {
     public class AppState
     {
-        public string Token { get; set; }
+        public SignedInUser User { get; set; }
 
-        public bool IsSignedIn => Token != null;
+        public bool IsSignedIn => User?.token != null;
+    }
+
+    public class SignedInUser
+    {
+        public string username { get; set; }
+        public string token { get; set; }
     }
 }

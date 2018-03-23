@@ -1,0 +1,71 @@
+﻿@page "/signin"
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<div class="auth-page">
+    <div class="container page">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-xs-12">
+                <h1 class="text-xs-center">Sign in</h1>
+                <p class="text-xs-center">
+                    <a href="/signup">Need an account?</a>
+                </p>
+                @if (isError)
+                {
+                    <ul class="error-messages">
+                        <li>The email address or password is wrong.</li>
+                    </ul>
+                }
+                <form>
+                    <fieldset class="form-group">
+                        <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(user.email)>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(user.password)>
+                    </fieldset>
+                    <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                        Sign in
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    User user = new User();
+    bool isError = false;
+
+    async Task Submit()
+    {
+        var signInResponse = await Http.PostJsonAsync<SignInResponse>("https://conduit.productionready.io/api/users/login",
+            new
+            {
+                user = user
+            });
+
+        if (signInResponse.user != null)
+            UriHelper.NavigateTo("/");
+        else
+        {
+            isError = true;
+            StateHasChanged();
+        }
+    }
+
+    class User
+    {
+        public string email { get; set; }
+        public string password { get; set; }
+    }
+
+    class SignInResponse
+    {
+        public LoggedInUser user { get; set; }
+    }
+
+    class LoggedInUser
+    {
+        public string token { get; set; }
+    }
+}

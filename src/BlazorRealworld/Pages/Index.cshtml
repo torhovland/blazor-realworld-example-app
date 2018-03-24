@@ -23,27 +23,36 @@
                         </li>
                     </ul>
                 </div>
-                @foreach (var article in articleData.articles ?? new Article[0])
+                @if ((articleData.articles ?? new Article[0]).Length == 0)
                 {
-                    var date = article.createdAt;
-
                     <div class="article-preview">
-                        <div class="article-meta">
-                            <a href="profile.html"><img src="@article.author.image" /></a>
-                            <div class="info">
-                                <a href="/profile/@article.author.username" class="author">@article.author.username</a>
-                                <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
-                            </div>
-                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                <i class="ion-heart"></i> @article.favoritesCount
-                            </button>
-                        </div>
-                        <a href="/article/@article.slug" class="preview-link">
-                            <h1>@article.title</h1>
-                            <p>@article.description</p>
-                            <span>Read more...</span>
-                        </a>
+                        No articles here... yet.
                     </div>
+                }
+                else
+                {
+                    foreach (var article in articleData.articles)
+                    {
+                        var date = article.createdAt;
+
+                        <div class="article-preview">
+                            <div class="article-meta">
+                                <a href="profile.html"><img src="@article.author.image" /></a>
+                                <div class="info">
+                                    <a href="/profile/@article.author.username" class="author">@article.author.username</a>
+                                    <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                                    <i class="ion-heart"></i> @article.favoritesCount
+                                </button>
+                            </div>
+                            <a href="/article/@article.slug" class="preview-link">
+                                <h1>@article.title</h1>
+                                <p>@article.description</p>
+                                <span>Read more...</span>
+                            </a>
+                        </div>
+                    }
                 }
 
             </div>

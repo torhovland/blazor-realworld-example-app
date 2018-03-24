@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlazorRealworld
+namespace BlazorRealworld.Model
 {
     public class ArticleModel
     {
@@ -8,11 +8,11 @@ namespace BlazorRealworld
         public string slug { get; set; }
         public DateTime createdAt { get; set; }
         public string description { get; set; }
-        public Author author { get; set; }
+        public AuthorModel author { get; set; }
         public int favoritesCount { get; set; }
     }
 
-    public class Author
+    public class AuthorModel
     {
         public string username { get; set; }
         public string image { get; set; }

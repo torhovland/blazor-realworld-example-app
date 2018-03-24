@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace BlazorRealworld
+namespace BlazorRealworld.Model
 {
-    public class User
+    public class UserModel
     {
         public string username { get; set; }
         public string token { get; set; }

@@ -1,39 +1,40 @@
 ﻿@page "/signin"
-@inject ApiClient Api
-@inject AppState AppState
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using BlazorRealworld.Model
+    @inject ApiClient Api
+    @inject AppState AppState
+    @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<div class="auth-page">
-    <div class="container page">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 col-xs-12">
-                <h1 class="text-xs-center">Sign in</h1>
-                <p class="text-xs-center">
-                    <a href="/signup">Need an account?</a>
-                </p>
-                @if (isError)
-                {
-                    <ul class="error-messages">
-                        <li>The email address or password is wrong.</li>
-                    </ul>
-                }
-                <form>
-                    <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userFormModel.email)>
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userFormModel.password)>
-                    </fieldset>
-                    <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
-                        Sign in
-                    </button>
-                </form>
+    <div class="auth-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xs-12">
+                    <h1 class="text-xs-center">Sign in</h1>
+                    <p class="text-xs-center">
+                        <a href="/signup">Need an account?</a>
+                    </p>
+                    @if (isError)
+                    {
+                        <ul class="error-messages">
+                            <li>The email address or password is wrong.</li>
+                        </ul>
+                    }
+                    <form>
+                        <fieldset class="form-group">
+                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userFormModel.email)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userFormModel.password)>
+                        </fieldset>
+                        <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                            Sign in
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@functions {
+    @functions {
     UserFormModel userFormModel = new UserFormModel();
     bool isError = false;
 
@@ -54,4 +55,4 @@
             StateHasChanged();
         }
     }
-}
+    }

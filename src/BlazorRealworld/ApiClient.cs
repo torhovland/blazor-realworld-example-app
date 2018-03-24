@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
+using BlazorRealworld.Model;
 
 namespace BlazorRealworld
 {
@@ -41,9 +42,16 @@ namespace BlazorRealworld
                 });
         }
 
-        public async Task<UserResponse> GetUserAsync()
+        public async Task<UserModel> GetUserAsync()
         {
-            return await _httpClient.GetJsonAsync<UserResponse>($"{BaseUrl}/user");
+            var response = await _httpClient.GetJsonAsync<UserResponse>($"{BaseUrl}/user");
+            return response.user;
+        }
+
+        public async Task<ProfileModel> GetProfileAsync(string username)
+        {
+            var response = await _httpClient.GetJsonAsync<ProfileResponse>($"{BaseUrl}/profiles/{username}");
+            return response.profile;
         }
 
         public async Task<IEnumerable<ArticleModel>> GetArticlesAsync(string tag = null)
@@ -74,7 +82,12 @@ namespace BlazorRealworld
     public class UserResponse
     {
         public Errors errors { get; set; }
-        public User user { get; set; }
+        public UserModel user { get; set; }
+    }
+
+    public class ProfileResponse
+    {
+        public ProfileModel profile { get; set; }
     }
 
     public class Errors

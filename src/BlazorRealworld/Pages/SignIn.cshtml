@@ -48,6 +48,7 @@
         if (signInResponse.user != null)
         {
             AppState.User = signInResponse.user;
+            RegisteredFunction.Invoke<bool>("consoleLog", "foo");
             UriHelper.NavigateTo("/");
         }
         else

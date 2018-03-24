@@ -26,13 +26,13 @@
                 </ul>
                 <form>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(user.username)>
+                        <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userFormModel.username)>
                     </fieldset>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(user.email)>
+                        <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userFormModel.email)>
                     </fieldset>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(user.password)>
+                        <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userFormModel.password)>
                     </fieldset>
                     <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
                         Sign up
@@ -44,7 +44,7 @@
 </div>
 
 @functions {
-    User user = new User();
+    UserFormModel userFormModel = new UserFormModel();
     SignUpResponse signUpResponse = new SignUpResponse();
 
     async Task Submit()
@@ -52,20 +52,13 @@
         signUpResponse = await Http.PostJsonAsync<SignUpResponse>("https://conduit.productionready.io/api/users",
             new
             {
-                user = user
+                user = userFormModel
             });
 
         if (signUpResponse.errors == null)
             UriHelper.NavigateTo("/");
         else
             StateHasChanged();
-    }
-
-    class User
-    {
-        public string username { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
     }
 
     class SignUpResponse

@@ -11,7 +11,8 @@ namespace BlazorRealworld
         {
             var serviceProvider = new BrowserServiceProvider(configure =>
             {
-                configure.Add(ServiceDescriptor.Singleton(new AppState()));
+                configure.Add(ServiceDescriptor.Singleton<AppState, AppState>());
+                configure.Add(ServiceDescriptor.Singleton<ApiClient, ApiClient>());
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

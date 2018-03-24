@@ -1,5 +1,6 @@
 ﻿@implements ILayoutComponent
 @inject AppState AppState
+@inject ApiClient Api
 
 <nav class="navbar navbar-light">
     <div class="container">
@@ -59,5 +60,16 @@
 </footer>
 
 @functions {
-public RenderFragment Body { get; set; }
+    public RenderFragment Body { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        var token = RegisteredFunction.Invoke<string>("getStoredToken");
+        if (token != null)
+        {
+            Api.SetToken(token);
+            var user = await Api.GetUser();
+            AppState.User = user;
+        }
+    }
 }

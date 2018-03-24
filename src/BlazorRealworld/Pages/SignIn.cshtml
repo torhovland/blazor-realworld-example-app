@@ -1,7 +1,7 @@
 ﻿@page "/signin"
-@inject HttpClient Http
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject ApiClient Api
 @inject AppState AppState
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <div class="auth-page">
     <div class="container page">
@@ -13,9 +13,9 @@
                 </p>
                 @if (isError)
                 {
-                <ul class="error-messages">
-                    <li>The email address or password is wrong.</li>
-                </ul>
+                    <ul class="error-messages">
+                        <li>The email address or password is wrong.</li>
+                    </ul>
                 }
                 <form>
                     <fieldset class="form-group">
@@ -39,16 +39,13 @@
 
     async Task Submit()
     {
-        var signInResponse = await Http.PostJsonAsync<UserResponse>("https://conduit.productionready.io/api/users/login",
-            new
-            {
-                user = userFormModel
-            });
+        var userResponse = await Api.SignInAsync(userFormModel);
+        var user = userResponse.user;
 
-        if (signInResponse.user != null)
+        if (user != null)
         {
-            AppState.User = signInResponse.user;
-            RegisteredFunction.Invoke<bool>("saveToken", signInResponse.user.token);
+            AppState.User = user;
+            RegisteredFunction.Invoke<bool>("saveToken", user.token);
             UriHelper.NavigateTo("/");
         }
         else

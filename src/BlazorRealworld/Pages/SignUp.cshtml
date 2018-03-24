@@ -1,5 +1,5 @@
 ﻿@page "/signup"
-@inject HttpClient Http
+@inject ApiClient Api
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <div class="auth-page">
@@ -45,31 +45,15 @@
 
 @functions {
     UserFormModel userFormModel = new UserFormModel();
-    SignUpResponse signUpResponse = new SignUpResponse();
+    UserResponse signUpResponse = new UserResponse();
 
     async Task Submit()
     {
-        signUpResponse = await Http.PostJsonAsync<SignUpResponse>("https://conduit.productionready.io/api/users",
-            new
-            {
-                user = userFormModel
-            });
+        signUpResponse = await Api.SignUpAsync(userFormModel);
 
         if (signUpResponse.errors == null)
             UriHelper.NavigateTo("/");
         else
             StateHasChanged();
-    }
-
-    class SignUpResponse
-    {
-        public Errors errors { get; set; }
-    }
-
-    class Errors
-    {
-        public string[] username { get; set; }
-        public string[] email { get; set; }
-        public string[] password { get; set; }
     }
 }

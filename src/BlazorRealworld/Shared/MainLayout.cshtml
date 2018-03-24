@@ -68,8 +68,8 @@
         if (token != null)
         {
             Api.SetToken(token);
-            var user = await Api.GetUser();
-            AppState.User = user;
+            var userResponse = await Api.GetUserAsync();
+            AppState.User = userResponse.user;
         }
     }
 }

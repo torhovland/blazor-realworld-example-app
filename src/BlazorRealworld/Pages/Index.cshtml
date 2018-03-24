@@ -1,6 +1,5 @@
 ﻿@page "/"
-@using System.Net.Http.Headers
-@inject HttpClient Http
+@inject ApiClient Api
 @inject AppState  AppState
 
 <div class="home-page">
@@ -16,14 +15,14 @@
                 <div class="feed-toggle">
                     <ul class="nav nav-pills outline-active">
                         <li class="nav-item">
-                            <a class="nav-link @feedState" href="/" @onclick(async () => await FeedAsync())>Your Feed</a>
+                            <a class="nav-link @feedState" href="/" @onclick(async () => await YourFeedAsync())>Your Feed</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @globalState" href="/" @onclick(async () => await GlobalAsync())>Global Feed</a>
+                            <a class="nav-link @globalState" href="/" @onclick(async () => await GlobalFeedAsync())>Global Feed</a>
                         </li>
                     </ul>
                 </div>
-                @if ((articleData.articles ?? new Article[0]).Length == 0)
+                @if (articles.Count() == 0)
                 {
                     <div class="article-preview">
                         No articles here... yet.
@@ -31,7 +30,7 @@
                 }
                 else
                 {
-                    foreach (var article in articleData.articles)
+                    foreach (var article in articles)
                     {
                         var date = article.createdAt;
 
@@ -60,7 +59,7 @@
                 <div class="sidebar">
                     <p>Popular Tags</p>
                     <div class="tag-list">
-                        @foreach (var tag in tagData.tags ?? new string[0])
+                        @foreach (var tag in tags)
                         {
                             <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
                         }
@@ -72,64 +71,37 @@
 </div>
 
 @functions {
-    ArticleData articleData = new ArticleData();
-    TagData tagData = new TagData();
+    IEnumerable<ArticleModel> articles = new ArticleModel[0];
+    IEnumerable<string> tags = new string[0];
     string globalState;
     string feedState;
 
     protected override async Task OnInitAsync()
     {
-        await GlobalAsync();
-        tagData = await Http.GetJsonAsync<TagData>("https://conduit.productionready.io/api/tags");
+        await GlobalFeedAsync();
+        tags = await Api.GetTagsAsync();
     }
 
-    async Task GlobalAsync()
+    async Task GlobalFeedAsync()
     {
         globalState = "active";
         feedState = "disabled";
-        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles?limit=10&offset=0");
+        articles = await Api.GetArticlesAsync();
         StateHasChanged();
     }
 
-    async Task FeedAsync()
+    async Task YourFeedAsync()
     {
         feedState = "active";
         globalState = "disabled";
-        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", AppState.User.token);
-        articleData = await Http.GetJsonAsync<ArticleData>("https://conduit.productionready.io/api/articles/feed?limit=10&offset=0");
+        articles = await Api.GetArticleFeedAsync();
         StateHasChanged();
     }
 
     async Task SelectTag(string tag)
     {
-        articleData = await Http.GetJsonAsync<ArticleData>($"https://conduit.productionready.io/api/articles?tag={tag}");
+        articles = await Api.GetArticlesAsync(tag);
         StateHasChanged();
-    }
-
-    class ArticleData
-    {
-        public Article[] articles { get; set; }
-    }
-
-    class Article
-    {
-        public string title { get; set; }
-        public string slug { get; set; }
-        public DateTime createdAt { get; set; }
-        public string description { get; set; }
-        public Author author { get; set; }
-        public int favoritesCount { get; set; }
-    }
-
-    class Author
-    {
-        public string username { get; set; }
-        public string image { get; set; }
-    }
-
-    class TagData
-    {
-        public string[] tags { get; set; }
     }
 
     static string Ordinal(int number)

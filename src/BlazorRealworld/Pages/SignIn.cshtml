@@ -48,7 +48,7 @@
         if (signInResponse.user != null)
         {
             AppState.User = signInResponse.user;
-            RegisteredFunction.Invoke<bool>("consoleLog", "foo");
+            RegisteredFunction.Invoke<bool>("saveToken", signInResponse.user.token);
             UriHelper.NavigateTo("/");
         }
         else

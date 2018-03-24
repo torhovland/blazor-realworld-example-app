@@ -15,15 +15,15 @@
                 <div class="feed-toggle">
                     <ul class="nav nav-pills outline-active">
                         <li class="nav-item">
-                            <a class="nav-link @feedState" href="/" @onclick(async () => await YourFeedAsync())>Your Feed</a>
+                            <a href="" class="nav-link @FeedState" @onclick(async () => await YourFeedAsync())>Your Feed</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @globalState" href="/" @onclick(async () => await GlobalFeedAsync())>Global Feed</a>
+                            <a href="" class="nav-link @GlobalState" @onclick(async () => await GlobalFeedAsync())>Global Feed</a>
                         </li>
-                        @if (selectedTag != null)
+                        @if (selectedTab == SelectedTab.Tag)
                         {
                             <li class="nav-item">
-                                <a class="nav-link @tagState" href="/"><i class="ion-pound"></i> @selectedTag</a>
+                                <a class="nav-link active"><i class="ion-pound"></i> @selectedTag</a>
                             </li>
                         }
                     </ul>
@@ -79,10 +79,20 @@
 @functions {
     IEnumerable<ArticleModel> articles = new ArticleModel[0];
     IEnumerable<string> tags = new string[0];
-    string globalState;
-    string feedState;
-    string tagState;
+    SelectedTab selectedTab;
     string selectedTag;
+
+    string FeedState
+    {
+        get
+        {
+            if (!AppState.IsSignedIn) return "disabled";
+            if (selectedTab == SelectedTab.Feed) return "active";
+            return "";
+        }
+    }
+
+    string GlobalState => selectedTab == SelectedTab.Global ? "active" : "";
 
     protected override async Task OnInitAsync()
     {
@@ -92,29 +102,21 @@
 
     async Task YourFeedAsync()
     {
-        feedState = "active";
-        globalState = "disabled";
-        tagState = "disabled";
-        selectedTag = null;
+        selectedTab = SelectedTab.Feed;
         articles = await Api.GetArticleFeedAsync();
         StateHasChanged();
     }
 
     async Task GlobalFeedAsync()
     {
-        feedState = "disabled";
-        globalState = "active";
-        tagState = "disabled";
-        selectedTag = null;
+        selectedTab = SelectedTab.Global;
         articles = await Api.GetArticlesAsync();
         StateHasChanged();
     }
 
     async Task SelectTag(string tag)
     {
-        feedState = "disabled";
-        globalState = "disabled";
-        tagState = "active";
+        selectedTab = SelectedTab.Tag;
         selectedTag = tag;
         articles = await Api.GetArticlesAsync(tag);
         StateHasChanged();
@@ -133,5 +135,12 @@
             default: work += "th"; break;
         }
         return work;
+    }
+
+    enum SelectedTab
+    {
+        Feed,
+        Global,
+        Tag
     }
 }

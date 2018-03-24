@@ -20,6 +20,12 @@
                         <li class="nav-item">
                             <a class="nav-link @globalState" href="/" @onclick(async () => await GlobalFeedAsync())>Global Feed</a>
                         </li>
+                        @if (selectedTag != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @tagState" href="/"><i class="ion-pound"></i> @selectedTag</a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 @if (articles.Count() == 0)
@@ -75,6 +81,8 @@
     IEnumerable<string> tags = new string[0];
     string globalState;
     string feedState;
+    string tagState;
+    string selectedTag;
 
     protected override async Task OnInitAsync()
     {
@@ -82,24 +90,32 @@
         tags = await Api.GetTagsAsync();
     }
 
-    async Task GlobalFeedAsync()
-    {
-        globalState = "active";
-        feedState = "disabled";
-        articles = await Api.GetArticlesAsync();
-        StateHasChanged();
-    }
-
     async Task YourFeedAsync()
     {
         feedState = "active";
         globalState = "disabled";
+        tagState = "disabled";
+        selectedTag = null;
         articles = await Api.GetArticleFeedAsync();
+        StateHasChanged();
+    }
+
+    async Task GlobalFeedAsync()
+    {
+        feedState = "disabled";
+        globalState = "active";
+        tagState = "disabled";
+        selectedTag = null;
+        articles = await Api.GetArticlesAsync();
         StateHasChanged();
     }
 
     async Task SelectTag(string tag)
     {
+        feedState = "disabled";
+        globalState = "disabled";
+        tagState = "active";
+        selectedTag = tag;
         articles = await Api.GetArticlesAsync(tag);
         StateHasChanged();
     }

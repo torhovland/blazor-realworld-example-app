@@ -29,7 +29,13 @@
                         }
                     </ul>
                 </div>
-                @if (articles.Count() == 0)
+                @if (articles == null)
+                {
+                    <div class="article-preview">
+                        Loading articles...
+                    </div>
+                }
+                else if (articles.Count() == 0)
                 {
                     <div class="article-preview">
                         No articles here... yet.
@@ -66,9 +72,16 @@
                 <div class="sidebar">
                     <p>Popular Tags</p>
                     <div class="tag-list">
-                        @foreach (var tag in tags)
+                        @if (tags == null)
                         {
-                            <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
+                            <text>Loading tags...</text>
+                        }
+                        else
+                        {
+                            foreach (var tag in tags)
+                            {
+                                <a href="" class="tag-pill tag-default" @onclick(async () => await SelectTag(tag))>@tag</a>
+                            }
                         }
                     </div>
                 </div>
@@ -78,8 +91,8 @@
 </div>
 
 @functions {
-    IEnumerable<ArticleModel> articles = new ArticleModel[0];
-    IEnumerable<string> tags = new string[0];
+    IEnumerable<ArticleModel> articles;
+    IEnumerable<string> tags;
     SelectedTab selectedTab;
     string selectedTag;
 

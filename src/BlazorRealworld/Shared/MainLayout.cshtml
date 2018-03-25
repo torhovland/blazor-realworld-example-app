@@ -4,10 +4,10 @@
 
 <nav class="navbar navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="/">conduit</a>
+        <NavLink class="navbar-brand" href="/">conduit</NavLink>
         <ul class="nav navbar-nav pull-xs-right">
             <li class="nav-item">
-                <NavLink class="nav-link" href=@("/")>
+                <NavLink class="nav-link" href="/">
                     Home
                 </NavLink>
             </li>
@@ -21,7 +21,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href=@("/settings")>
+                    <NavLink class="nav-link" href="/settings">
                         <i class="ion-gear-a"></i>&nbsp;Settings
                     </NavLink>
                 </li>
@@ -34,12 +34,12 @@
             else
             {
                 <li class="nav-item">
-                    <NavLink class="nav-link" href=@("/signin")>
+                    <NavLink class="nav-link" href="/signin">
                         Sign in
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href=@("/signup")>
+                    <NavLink class="nav-link" href="/signup">
                         Sign up
                     </NavLink>
                 </li>
@@ -52,7 +52,7 @@
 
 <footer>
     <div class="container">
-        <a href="/" class="logo-font">conduit</a>
+        <NavLink href="/" class="logo-font">conduit</NavLink>
         <span class="attribution">
             An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
         </span>

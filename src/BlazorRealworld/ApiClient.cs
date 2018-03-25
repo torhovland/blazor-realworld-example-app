@@ -23,6 +23,11 @@ namespace BlazorRealworld
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
         }
 
+        public void ClearToken()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
         public async Task<UserResponse> SignUpAsync(UserFormModel userForm)
         {
             return await PostUserForm("/users", userForm);

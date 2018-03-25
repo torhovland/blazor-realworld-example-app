@@ -26,6 +26,11 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/" @onclick(SignOut)>
+                        Sign out
+                    </a>
+                </li>
+                <li class="nav-item">
                     <NavLink class="nav-link" href=@("/profile/" + username)>
                         @username
                     </NavLink>
@@ -70,5 +75,12 @@
             Api.SetToken(token);
             AppState.User = await Api.GetUserAsync();
         }
+    }
+
+    void SignOut()
+    {
+        Api.ClearToken();
+        AppState.User = null;
+        RegisteredFunction.Invoke<bool>("deleteStoredToken");
     }
 }

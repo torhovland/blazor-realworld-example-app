@@ -1,70 +1,71 @@
 ﻿@implements ILayoutComponent
 @inject AppState AppState
 @inject ApiClient Api
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<nav class="navbar navbar-light">
-    <div class="container">
-        <NavLink class="navbar-brand" href="/">conduit</NavLink>
-        <ul class="nav navbar-nav pull-xs-right">
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/">
-                    Home
-                </NavLink>
-            </li>
-            @if (AppState.IsSignedIn)
-            {
-                var username = AppState.User?.username;
-
+    <nav class="navbar navbar-light">
+        <div class="container">
+            <NavLink class="navbar-brand" href="/" Match=NavLinkMatch.All>conduit</NavLink>
+            <ul class="nav navbar-nav pull-xs-right">
                 <li class="nav-item">
-                    <a class="nav-link" href="">
-                        <i class="ion-compose"></i>&nbsp;New Post
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/settings">
-                        <i class="ion-gear-a"></i>&nbsp;Settings
+                    <NavLink class="nav-link" href="/" Match=NavLinkMatch.All>
+                        Home
                     </NavLink>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/" @onclick(SignOut)>
-                        Sign out
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href=@("/profile/" + username)>
-                        @username
-                    </NavLink>
-                </li>
-            }
-            else
-            {
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/signin">
-                        Sign in
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/signup">
-                        Sign up
-                    </NavLink>
-                </li>
-            }
-        </ul>
-    </div>
-</nav>
+                @if (AppState.IsSignedIn)
+                {
+                    var username = AppState.User?.username;
 
-@Body
+                    <li class="nav-item">
+                        <a class="nav-link" href="">
+                            <i class="ion-compose"></i>&nbsp;New Post
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/settings">
+                            <i class="ion-gear-a"></i>&nbsp;Settings
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" @onclick(SignOut)>
+                            Sign out
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href=@("/profile/" + username)>
+                            @username
+                        </NavLink>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/signin">
+                            Sign in
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/signup">
+                            Sign up
+                        </NavLink>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
 
-<footer>
-    <div class="container">
-        <NavLink href="/" class="logo-font">conduit</NavLink>
-        <span class="attribution">
-            An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
-        </span>
-    </div>
-</footer>
+    @Body
 
-@functions {
+    <footer>
+        <div class="container">
+            <NavLink href="/" class="logo-font">conduit</NavLink>
+            <span class="attribution">
+                An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
+            </span>
+        </div>
+    </footer>
+
+    @functions {
     public RenderFragment Body { get; set; }
 
     protected override async Task OnInitAsync()

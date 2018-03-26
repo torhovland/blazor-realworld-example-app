@@ -73,15 +73,28 @@ namespace BlazorRealworld
         {
             var tagFilter = tag == null ? "" : $"tag={tag}&";
             var query = $"?{tagFilter}limit=10&offset=0";
-            var articleResponse = await _httpClient.GetJsonAsync<ArticleResponse>($"{BaseUrl}{urlFragment}{query}");
-            return articleResponse.articles;
+            var response = await _httpClient.GetJsonAsync<ArticlesResponse>($"{BaseUrl}{urlFragment}{query}");
+            return response.articles;
+        }
+
+        public async Task<ArticleModel> GetArticleAsync(string slug)
+        {
+            var response = await _httpClient.GetJsonAsync<ArticleResponse>($"{BaseUrl}/articles/{slug}");
+            return response.article;
         }
 
         public async Task<IEnumerable<string>> GetTagsAsync()
         {
-            var tagsResponse = await _httpClient.GetJsonAsync<TagResponse>($"{BaseUrl}/tags");
-            return tagsResponse.tags;
+            var response = await _httpClient.GetJsonAsync<TagResponse>($"{BaseUrl}/tags");
+            return response.tags;
         }
+    }
+
+    public class Errors
+    {
+        public string[] username { get; set; }
+        public string[] email { get; set; }
+        public string[] password { get; set; }
     }
 
     public class UserResponse
@@ -95,16 +108,14 @@ namespace BlazorRealworld
         public ProfileModel profile { get; set; }
     }
 
-    public class Errors
+    class ArticlesResponse
     {
-        public string[] username { get; set; }
-        public string[] email { get; set; }
-        public string[] password { get; set; }
+        public ArticleModel[] articles { get; set; }
     }
 
     class ArticleResponse
     {
-        public ArticleModel[] articles { get; set; }
+        public ArticleModel article { get; set; }
     }
 
     class TagResponse

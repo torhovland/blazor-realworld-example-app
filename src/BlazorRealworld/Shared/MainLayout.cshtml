@@ -27,14 +27,14 @@
                         </NavLink>
                     </li>
                     <li class="nav-item">
+                        <NavLink class="nav-link" href=@("/profile/" + username)>
+                            @@@username
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/" @onclick(SignOut)>
                             Sign out
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href=@("/profile/" + username)>
-                            @username
-                        </NavLink>
                     </li>
                 }
                 else

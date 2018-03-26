@@ -82,5 +82,6 @@
         Api.ClearToken();
         AppState.User = null;
         RegisteredFunction.Invoke<bool>("deleteStoredToken");
+        UriHelper.NavigateTo("/");
     }
-}
+    }

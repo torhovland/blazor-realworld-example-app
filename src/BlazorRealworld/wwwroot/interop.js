@@ -1,9 +1,4 @@
-﻿Blazor.registerFunction('consoleLog', (message) => {
-    console.log(message);
-    return true;
-});
-
-Blazor.registerFunction('saveToken', token => {
+﻿Blazor.registerFunction('saveToken', token => {
     window.localStorage.setItem('token', token);
     console.log("Authentication token has been stored.");
     return true;

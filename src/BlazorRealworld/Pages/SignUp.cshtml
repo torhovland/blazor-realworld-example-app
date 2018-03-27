@@ -11,20 +11,7 @@
                 <p class="text-xs-center">
                     <a href="/signin">Have an account?</a>
                 </p>
-                <ul class="error-messages">
-                    @foreach (var error in response.errors?.username ?? new string[0])
-                    {
-                        <li>The username @error.</li>
-                    }
-                    @foreach (var error in response.errors?.email ?? new string[0])
-                    {
-                        <li>The email address @error.</li>
-                    }
-                    @foreach (var error in response.errors?.password ?? new string[0])
-                    {
-                        <li>The password @error.</li>
-                    }
-                </ul>
+                <UserFormErrors Errors=@response.errors />
                 <form>
                     <fieldset class="form-group">
                         <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>

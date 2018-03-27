@@ -1,60 +1,60 @@
 ﻿@page "/signup"
 @using BlazorRealworld.Model
-    @inject ApiClient Api
-    @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject ApiClient Api
+@inject IUriHelper UriHelper
 
-    <div class="auth-page">
-        <div class="container page">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 col-xs-12">
-                    <h1 class="text-xs-center">Sign up</h1>
-                    <p class="text-xs-center">
-                        <a href="/signin">Have an account?</a>
-                    </p>
-                    <ul class="error-messages">
-                        @foreach (var error in signUpResponse.errors?.username ?? new string[0])
-                        {
-                            <li>The username @error.</li>
-                        }
-                        @foreach (var error in signUpResponse.errors?.email ?? new string[0])
-                        {
-                            <li>The email address @error.</li>
-                        }
-                        @foreach (var error in signUpResponse.errors?.password ?? new string[0])
-                        {
-                            <li>The password @error.</li>
-                        }
-                    </ul>
-                    <form>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userFormModel.username)>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userFormModel.email)>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userFormModel.password)>
-                        </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
-                            Sign up
-                        </button>
-                    </form>
-                </div>
+<div class="auth-page">
+    <div class="container page">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-xs-12">
+                <h1 class="text-xs-center">Sign up</h1>
+                <p class="text-xs-center">
+                    <a href="/signin">Have an account?</a>
+                </p>
+                <ul class="error-messages">
+                    @foreach (var error in response.errors?.username ?? new string[0])
+                    {
+                        <li>The username @error.</li>
+                    }
+                    @foreach (var error in response.errors?.email ?? new string[0])
+                    {
+                        <li>The email address @error.</li>
+                    }
+                    @foreach (var error in response.errors?.password ?? new string[0])
+                    {
+                        <li>The password @error.</li>
+                    }
+                </ul>
+                <form>
+                    <fieldset class="form-group">
+                        <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userModel.email)>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userModel.password)>
+                    </fieldset>
+                    <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                        Sign up
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    @functions {
-    UserFormModel userFormModel = new UserFormModel();
-    UserResponse signUpResponse = new UserResponse();
+@functions {
+    UserModel userModel = new UserModel();
+    UserResponse response = new UserResponse();
 
     async Task Submit()
     {
-        signUpResponse = await Api.SignUpAsync(userFormModel);
+        response = await Api.SignUpAsync(userModel);
 
-        if (signUpResponse.errors == null)
+        if (response.errors == null)
             UriHelper.NavigateTo("/");
         else
             StateHasChanged();
     }
-    }
+}

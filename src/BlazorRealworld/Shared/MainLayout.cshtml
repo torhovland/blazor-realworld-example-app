@@ -1,7 +1,8 @@
-﻿@implements ILayoutComponent
+﻿@using System
+@implements ILayoutComponent
 @inject AppState AppState
 @inject ApiClient Api
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject IUriHelper UriHelper
 
     <nav class="navbar navbar-light">
         <div class="container">
@@ -65,7 +66,7 @@
         </div>
     </footer>
 
-    @functions {
+@functions {
     public RenderFragment Body { get; set; }
 
     void SignOut()
@@ -75,4 +76,4 @@
         RegisteredFunction.Invoke<bool>("deleteStoredToken");
         UriHelper.NavigateTo("/");
     }
-    }
+}

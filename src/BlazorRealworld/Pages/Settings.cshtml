@@ -1,36 +1,87 @@
 ﻿@page "/settings"
+@using System
+@using BlazorRealworld
+@using BlazorRealworld.Model
+@inject AppState AppState
+@inject ApiClient Api
+@inject IUriHelper UriHelper
 
 <div class="settings-page">
-  <div class="container page">
-    <div class="row">
-
-      <div class="col-md-6 offset-md-3 col-xs-12">
-        <h1 class="text-xs-center">Your Settings</h1>
-
-        <form>
-            <fieldset>
-                <fieldset class="form-group">
-                    <input class="form-control" type="text" placeholder="URL of profile picture">
-                </fieldset>
-                <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Your Name">
-                </fieldset>
-                <fieldset class="form-group">
-                    <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you"></textarea>
-                </fieldset>
-                <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Email">
-                </fieldset>
-                <fieldset class="form-group">
-                    <input class="form-control form-control-lg" type="password" placeholder="Password">
-                </fieldset>
-                <button class="btn btn-lg btn-primary pull-xs-right">
-                    Update Settings
-                </button>
-            </fieldset>
-        </form>
-      </div>
-
+    <div class="container page">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-xs-12">
+                <h1 class="text-xs-center">Your Settings</h1>
+                <ul class="error-messages">
+                    @foreach (var error in response.errors?.username ?? new string[0])
+                    {
+                    <li>The username @error.</li>
+                    }
+                    @foreach (var error in response.errors?.email ?? new string[0])
+                    {
+                    <li>The email address @error.</li>
+                    }
+                    @foreach (var error in response.errors?.password ?? new string[0])
+                    {
+                    <li>The password @error.</li>
+                    }
+                </ul>
+                <form>
+                    <fieldset>
+                        <fieldset class="form-group">
+                            <input class="form-control" type="text" placeholder="URL of profile picture" @bind(userModel.image)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" @onchange((bio) => BioChanged(bio))>@userModel.bio</textarea>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userModel.email)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userModel.password)>
+                        </fieldset>
+                        <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                            Update Settings
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+@functions
+{
+    UserModel userModel = new UserModel();
+    UserResponse response = new UserResponse();
+
+    protected override async Task OnInitAsync()
+    {
+        // We need to wait until the user data has loaded, then request a refresh.
+        // If not, the form will be empty if we start the app on this route.
+        await AppState.UntilUserSetAsync();
+        userModel = AppState.User.Clone();
+        // A refresh is implicitly requested at the end of OnInitAsync().
+    }
+
+    void BioChanged(object bio)
+    {
+        // @bind doesn't support textarea yet
+        userModel.bio = bio.ToString();
+    }
+
+    async Task Submit()
+    {
+        response = await Api.UpdateUserAsync(userModel);
+
+        if (response.user != null)
+        {
+            AppState.User = response.user;
+            UriHelper.NavigateTo("/");
+        }
+        else
+            StateHasChanged();
+    }
+}

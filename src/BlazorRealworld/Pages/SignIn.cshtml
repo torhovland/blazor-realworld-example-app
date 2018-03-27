@@ -2,7 +2,7 @@
 @using BlazorRealworld.Model
     @inject ApiClient Api
     @inject AppState AppState
-    @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+    @inject IUriHelper UriHelper
 
     <div class="auth-page">
         <div class="container page">
@@ -20,10 +20,10 @@
                     }
                     <form>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userFormModel.email)>
+                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userModel.email)>
                         </fieldset>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userFormModel.password)>
+                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userModel.password)>
                         </fieldset>
                         <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
                             Sign in
@@ -34,14 +34,14 @@
         </div>
     </div>
 
-    @functions {
-    UserFormModel userFormModel = new UserFormModel();
+@functions {
+    UserModel userModel = new UserModel();
     bool isError = false;
 
     async Task Submit()
     {
-        var userResponse = await Api.SignInAsync(userFormModel);
-        var user = userResponse.user;
+        var response = await Api.SignInAsync(userModel);
+        var user = response.user;
 
         if (user != null)
         {
@@ -55,4 +55,4 @@
             StateHasChanged();
         }
     }
-    }
+}

@@ -28,17 +28,28 @@ namespace BlazorRealworld
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<UserResponse> SignUpAsync(UserFormModel userForm)
+        public async Task<UserResponse> SignUpAsync(UserModel userForm)
         {
             return await PostUserForm("/users", userForm);
         }
 
-        public async Task<UserResponse> SignInAsync(UserFormModel userForm)
+        public async Task<UserResponse> SignInAsync(UserModel userForm)
         {
             return await PostUserForm("/users/login", userForm);
         }
 
-        async Task<UserResponse> PostUserForm(string urlFragment, UserFormModel userForm)
+        public async Task<UserResponse> UpdateUserAsync(UserModel userForm)
+        {
+            return await PutUserForm("/user", userForm);
+        }
+
+        public async Task<UserModel> GetUserAsync()
+        {
+            var response = await _httpClient.GetJsonAsync<UserResponse>($"{BaseUrl}/user");
+            return response.user;
+        }
+
+        async Task<UserResponse> PostUserForm(string urlFragment, UserModel userForm)
         {
             return await _httpClient.PostJsonAsync<UserResponse>($"{BaseUrl}{urlFragment}",
                 new
@@ -47,10 +58,13 @@ namespace BlazorRealworld
                 });
         }
 
-        public async Task<UserModel> GetUserAsync()
+        async Task<UserResponse> PutUserForm(string urlFragment, UserModel userForm)
         {
-            var response = await _httpClient.GetJsonAsync<UserResponse>($"{BaseUrl}/user");
-            return response.user;
+            return await _httpClient.PutJsonAsync<UserResponse>($"{BaseUrl}{urlFragment}",
+                new
+                {
+                    user = userForm
+                });
         }
 
         public async Task<ProfileModel> GetProfileAsync(string username)

@@ -68,16 +68,6 @@
     @functions {
     public RenderFragment Body { get; set; }
 
-    protected override async Task OnInitAsync()
-    {
-        var token = RegisteredFunction.Invoke<string>("getStoredToken");
-        if (token != null)
-        {
-            Api.SetToken(token);
-            AppState.User = await Api.GetUserAsync();
-        }
-    }
-
     void SignOut()
     {
         Api.ClearToken();

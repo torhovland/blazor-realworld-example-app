@@ -4,9 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^5.1.4",
     "cypress": "^2.1.0"
   },
   "scripts": {
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "test": "cypress run",
+    "test:react": "cross-env CYPRESS_baseUrl=https://react-redux.realworld.io cypress run"
   }
 }

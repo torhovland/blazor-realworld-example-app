@@ -1,0 +1,12 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^2.1.0"
+  },
+  "scripts": {
+    "cypress:open": "cypress open"
+  }
+}

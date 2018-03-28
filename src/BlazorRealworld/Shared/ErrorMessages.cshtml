@@ -13,8 +13,20 @@
     {
         <li>The password @error.</li>
     }
+    @foreach (var error in Errors?.title ?? new string[0])
+    {
+        <li>The title @error.</li>
+    }
+    @foreach (var error in Errors?.description ?? new string[0])
+    {
+        <li>The description @error.</li>
+    }
+    @foreach (var error in Errors?.body ?? new string[0])
+    {
+        <li>The article text @error.</li>
+    }
 </ul>
 
 @functions {
-    public Errors Errors { get; set; }
+    public ErrorsModel Errors { get; set; }
 }

@@ -13,6 +13,7 @@ namespace BlazorRealworld.Model
         public string slug { get; set; }
         public string body { get; set; }
         public DateTime createdAt { get; set; }
+        public string[] tagList { get; set; }
         public string description { get; set; }
         public AuthorModel author { get; set; }
         public int favoritesCount { get; set; }

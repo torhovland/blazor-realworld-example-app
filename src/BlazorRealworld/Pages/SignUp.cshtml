@@ -11,7 +11,7 @@
                 <p class="text-xs-center">
                     <a href="/signin">Have an account?</a>
                 </p>
-                <UserFormErrors Errors=@response.errors />
+                <ErrorMessages Errors=@response.errors />
                 <form>
                     <fieldset class="form-group">
                         <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>

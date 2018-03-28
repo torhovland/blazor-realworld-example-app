@@ -11,7 +11,7 @@ namespace BlazorRealworld
     public class ApiClient
     {
         const string BaseUrl = "https://conduit.productionready.io/api";
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
         public ApiClient(HttpClient httpClient)
         {
@@ -30,17 +30,17 @@ namespace BlazorRealworld
 
         public async Task<UserResponse> SignUpAsync(UserModel userForm)
         {
-            return await PostUserForm("/users", userForm);
+            return await PostUserFormAsync("/users", userForm);
         }
 
         public async Task<UserResponse> SignInAsync(UserModel userForm)
         {
-            return await PostUserForm("/users/login", userForm);
+            return await PostUserFormAsync("/users/login", userForm);
         }
 
         public async Task<UserResponse> UpdateUserAsync(UserModel userForm)
         {
-            return await PutUserForm("/user", userForm);
+            return await PutUserFormAsync("/user", userForm);
         }
 
         public async Task<UserModel> GetUserAsync()
@@ -49,7 +49,7 @@ namespace BlazorRealworld
             return response.user;
         }
 
-        async Task<UserResponse> PostUserForm(string urlFragment, UserModel userForm)
+        async Task<UserResponse> PostUserFormAsync(string urlFragment, UserModel userForm)
         {
             return await _httpClient.PostJsonAsync<UserResponse>($"{BaseUrl}{urlFragment}",
                 new
@@ -58,7 +58,7 @@ namespace BlazorRealworld
                 });
         }
 
-        async Task<UserResponse> PutUserForm(string urlFragment, UserModel userForm)
+        async Task<UserResponse> PutUserFormAsync(string urlFragment, UserModel userForm)
         {
             return await _httpClient.PutJsonAsync<UserResponse>($"{BaseUrl}{urlFragment}",
                 new
@@ -102,18 +102,20 @@ namespace BlazorRealworld
             var response = await _httpClient.GetJsonAsync<TagResponse>($"{BaseUrl}/tags");
             return response.tags;
         }
-    }
 
-    public class Errors
-    {
-        public string[] username { get; set; }
-        public string[] email { get; set; }
-        public string[] password { get; set; }
+        public async Task<ArticleResponse> PostArticleAsync(ArticleModel article)
+        {
+            return await _httpClient.PostJsonAsync<ArticleResponse>($"{BaseUrl}/articles",
+                new
+                {
+                    article = article
+                });
+        }
     }
 
     public class UserResponse
     {
-        public Errors errors { get; set; }
+        public ErrorsModel errors { get; set; }
         public UserModel user { get; set; }
     }
 
@@ -122,14 +124,15 @@ namespace BlazorRealworld
         public ProfileModel profile { get; set; }
     }
 
+    public class ArticleResponse
+    {
+        public ErrorsModel errors { get; set; }
+        public ArticleModel article { get; set; }
+    }
+
     class ArticlesResponse
     {
         public ArticleModel[] articles { get; set; }
-    }
-
-    class ArticleResponse
-    {
-        public ArticleModel article { get; set; }
     }
 
     class TagResponse

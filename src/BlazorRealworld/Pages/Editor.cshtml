@@ -1,31 +1,62 @@
-﻿@page "/editor"
+﻿@using System.Runtime.InteropServices.ComTypes
+@using BlazorRealworld.Model
+@page "/editor"
+@inject ApiClient Api
+@inject IUriHelper UriHelper
 
 <div class="editor-page">
-  <div class="container page">
-    <div class="row">
+    <div class="container page">
+        <div class="row">
 
-      <div class="col-md-10 offset-md-1 col-xs-12">
-        <form>
-          <fieldset>
-            <fieldset class="form-group">
-                <input type="text" class="form-control form-control-lg" placeholder="Article Title">
-            </fieldset>
-            <fieldset class="form-group">
-                <input type="text" class="form-control" placeholder="What's this article about?">
-            </fieldset>
-            <fieldset class="form-group">
-                <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
-            </fieldset>
-            <fieldset class="form-group">
-                <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
-            </fieldset>
-            <button class="btn btn-lg pull-xs-right btn-primary" type="button">
-                Publish Article
-            </button>
-          </fieldset>
-        </form>
-      </div>
+            <div class="col-md-10 offset-md-1 col-xs-12">
+                <ErrorMessages Errors=@response.errors />
+                <form>
+                    <fieldset>
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control form-control-lg" placeholder="Article Title" @bind(articleModel.title)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control" placeholder="What's this article about?" @bind(articleModel.description)>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)" @onchange((body) => BodyChanged(body))>@articleModel.body</textarea>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control" placeholder="Enter tags" @bind(tagString)><div class="tag-list"></div>
+                        </fieldset>
+                        <button class="btn btn-lg pull-xs-right btn-primary" type="button" @onclick(async () => await Submit())>
+                            Publish Article
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
 
+        </div>
     </div>
-  </div>
 </div>
+
+@functions
+{
+    ArticleModel articleModel = new ArticleModel();
+    ArticleResponse response = new ArticleResponse();
+    string tagString = "";
+
+    void BodyChanged(object body)
+    {
+        // @bind doesn't support textarea yet
+        articleModel.body = body.ToString();
+    }
+
+    async Task Submit()
+    {
+        articleModel.tagList = tagString.Split(' ');
+        response = await Api.PostArticleAsync(articleModel);
+
+        if (response.article != null)
+        {
+            UriHelper.NavigateTo("/");
+        }
+        else
+            StateHasChanged();
+    }
+}

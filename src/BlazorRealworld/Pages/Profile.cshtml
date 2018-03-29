@@ -1,6 +1,6 @@
 ﻿@page "/profile/{Username}"
 @using BlazorRealworld.Model
-@inject ApiClient Api
+@inject ApiClient api
 
 <div class="profile-page">
     <div class="user-info">
@@ -85,6 +85,6 @@
 
     protected override async Task OnInitAsync()
     {
-        profile = await Api.GetProfileAsync(Username);
+        profile = await api.GetProfileAsync(Username);
     }
 }

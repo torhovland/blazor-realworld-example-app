@@ -1,8 +1,7 @@
-﻿@using System.Runtime.InteropServices.ComTypes
-@using BlazorRealworld.Model
+﻿@using BlazorRealworld.Model
 @page "/editor"
-@inject ApiClient Api
-@inject IUriHelper UriHelper
+@inject ApiClient api
+@inject IUriHelper uriHelper
 
 <div class="editor-page">
     <div class="container page">
@@ -44,13 +43,14 @@
     async Task Submit()
     {
         articleModel.tagList = tagString.Split(' ');
-        response = await Api.PostArticleAsync(articleModel);
+        response = await api.PostArticleAsync(articleModel);
 
         if (response.article != null)
         {
-            UriHelper.NavigateTo("/");
+            uriHelper.NavigateTo("/");
         }
         else
+            // Show errors
             StateHasChanged();
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/article/{Slug}"
 @using BlazorRealworld.Model
-@inject ApiClient Api
+@inject ApiClient api
 
 <div class="article-page">
 
@@ -127,6 +127,6 @@
 
     protected override async Task OnInitAsync()
     {
-        article = await Api.GetArticleAsync(Slug);
+        article = await api.GetArticleAsync(Slug);
     }
 }

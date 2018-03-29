@@ -1,10 +1,10 @@
 ﻿@page "/"
 @using BlazorRealworld.Model
-@inject ApiClient Api
-@inject AppState  AppState
+@inject ApiClient api
+@inject AppState state
 
 <div class="home-page">
-    @if (!AppState.IsSignedIn)
+    @if (!state.IsSignedIn)
     {
         <div class="banner">
             <div class="container">
@@ -103,7 +103,7 @@
     {
         get
         {
-            if (!AppState.IsSignedIn) return "disabled";
+            if (!state.IsSignedIn) return "disabled";
             if (selectedTab == SelectedTab.Feed) return "active";
             return "";
         }
@@ -114,20 +114,20 @@
     protected override async Task OnInitAsync()
     {
         await GlobalFeedAsync();
-        tags = await Api.GetTagsAsync();
+        tags = await api.GetTagsAsync();
     }
 
     async Task YourFeedAsync()
     {
         selectedTab = SelectedTab.Feed;
-        articles = await Api.GetArticleFeedAsync();
+        articles = await api.GetArticleFeedAsync();
         StateHasChanged();
     }
 
     async Task GlobalFeedAsync()
     {
         selectedTab = SelectedTab.Global;
-        articles = await Api.GetArticlesAsync();
+        articles = await api.GetArticlesAsync();
         StateHasChanged();
     }
 
@@ -135,7 +135,7 @@
     {
         selectedTab = SelectedTab.Tag;
         selectedTag = tag;
-        articles = await Api.GetArticlesAsync(tag);
+        articles = await api.GetArticlesAsync(tag);
         StateHasChanged();
     }
 

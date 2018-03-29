@@ -1,7 +1,7 @@
 ﻿@page "/signup"
 @using BlazorRealworld.Model
-@inject ApiClient Api
-@inject IUriHelper UriHelper
+@inject ApiClient api
+@inject IUriHelper uriHelper
 
 <div class="auth-page">
     <div class="container page">
@@ -37,11 +37,12 @@
 
     async Task Submit()
     {
-        response = await Api.SignUpAsync(userModel);
+        response = await api.SignUpAsync(userModel);
 
         if (response.errors == null)
-            UriHelper.NavigateTo("/");
+            uriHelper.NavigateTo("/");
         else
+            // Show errors
             StateHasChanged();
     }
 }

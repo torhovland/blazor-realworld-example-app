@@ -37,3 +37,16 @@ describe('Sign up', function () {
         cy.contains("can't be blank")
     })
 })
+
+describe('Sign in', function () {
+    it("Logs in", function () {
+        cy.visit('/')
+        cy.contains('Sign in').click()
+        cy.get('[type=email]').type(Cypress.env('email'))
+        cy.get('[type=password]').type(Cypress.env('password'))
+        cy.get('[type=submit]').click()
+
+        // Verify we're back on the Home page
+        cy.contains("Read more")
+    })
+})

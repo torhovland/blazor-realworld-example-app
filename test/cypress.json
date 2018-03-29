@@ -1,3 +1,7 @@
 {
-    "baseUrl": "http://localhost:50077"
+    "baseUrl": "http://localhost:50077",
+    "env": {
+        "email": "set privately in cypress.env.json",
+        "password": "set privately in cypress.env.json"
+    }
 }

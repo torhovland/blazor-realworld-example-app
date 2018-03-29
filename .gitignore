@@ -29,3 +29,4 @@ bin/
 node_modules/
 /test/cypress/screenshots/
 /test/cypress/videos/
+cypress.env.json

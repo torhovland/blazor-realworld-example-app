@@ -1,24 +1,33 @@
 ﻿using System;
-using System.Threading.Tasks;
 using BlazorRealworld.Model;
 
 namespace BlazorRealworld
 {
     public class AppState
     {
+        public event Action OnChange;
+        public event Action OnUserLoaded;
+
+        private UserModel _user;
+
         public AppState()
         {
             User = new UserModel();
         }
 
-        public UserModel User { get; set; }
+        private void NotifyStateChanged() => OnChange?.Invoke();
+        private void NotifyUserLoaded() => OnUserLoaded?.Invoke();
+
+        public UserModel User
+        {
+            get => _user;
+            set
+            {
+                _user = value;
+                NotifyUserLoaded();
+            }
+        }
 
         public bool IsSignedIn => User?.token != null;
-
-        public async Task UntilUserSetAsync()
-        {
-            while (User.token == null)
-                await Task.Delay(1);
-        }
     }
 }

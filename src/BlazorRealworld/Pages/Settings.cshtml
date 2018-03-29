@@ -2,9 +2,9 @@
 @using System
 @using BlazorRealworld
 @using BlazorRealworld.Model
-@inject AppState AppState
-@inject ApiClient Api
-@inject IUriHelper UriHelper
+@inject AppState state
+@inject ApiClient api
+@inject IUriHelper uriHelper
 
 <div class="settings-page">
     <div class="container page">
@@ -44,23 +44,25 @@
     UserModel userModel = new UserModel();
     UserResponse response = new UserResponse();
 
-    protected override async Task OnInitAsync()
+    protected override void OnInit()
     {
-        // We need to wait until the user data has loaded, then request a refresh.
-        // If not, the form will be empty if we start the app on this route.
-        await AppState.UntilUserSetAsync();
-        userModel = AppState.User.Clone();
-        // A refresh is implicitly requested at the end of OnInitAsync().
+        state.OnUserLoaded += UserHasLoaded;
+    }
+
+    void UserHasLoaded()
+    {
+        userModel = state.User.Clone();
+        StateHasChanged();
     }
 
     async Task Submit()
     {
-        response = await Api.UpdateUserAsync(userModel);
+        response = await api.UpdateUserAsync(userModel);
 
         if (response.user != null)
         {
-            AppState.User = response.user;
-            UriHelper.NavigateTo("/");
+            state.User = response.user;
+            uriHelper.NavigateTo("/");
         }
         else
             StateHasChanged();

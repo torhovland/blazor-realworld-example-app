@@ -50,3 +50,29 @@ describe('Sign in', function () {
         cy.contains("Read more")
     })
 })
+
+describe('Editor', function () {
+    it("Submits an article", function () {
+        cy.visit('/')
+
+        // Sign in
+        cy.contains('Sign in').click()
+        cy.get('[type=email]').type(Cypress.env('email'))
+        cy.get('[type=password]').type(Cypress.env('password'))
+        cy.get('[type=submit]').click()
+
+        // Submit article
+        cy.contains("New Post").click()
+        cy.get('input').eq(0).type('Blazor Realworld Test Suite')
+        cy.get('input').eq(1).type('Description')
+        cy.get('input').eq(2).type('testing blazor')
+        cy.get('textarea').first().type('Article body')
+        cy.contains('Publish Article').click()
+
+        // Delete article
+        cy.contains("Delete Article").click()
+
+        // Verify we're back on the Home page
+        cy.contains("Global Feed")
+    })
+})

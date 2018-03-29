@@ -5,29 +5,32 @@ namespace BlazorRealworld
 {
     public class AppState
     {
-        public event Action OnChange;
-        public event Action OnUserLoaded;
+        private readonly ApiClient api;
 
-        private UserModel _user;
-
-        public AppState()
+        public AppState(ApiClient api)
         {
+            this.api = api;
             User = new UserModel();
         }
 
-        private void NotifyStateChanged() => OnChange?.Invoke();
-        private void NotifyUserLoaded() => OnUserLoaded?.Invoke();
+        public event Action OnUserChange;
 
-        public UserModel User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                NotifyUserLoaded();
-            }
-        }
+        private void NotifyUserChanged() => OnUserChange?.Invoke();
+
+        public ErrorsModel Errors { get; private set; }
+        public UserModel User { get; private set; }
 
         public bool IsSignedIn => User?.token != null;
+
+        public void UpdateUser(UserModel user)
+        {
+            User = user;
+            var token = User?.token;
+
+            if (token != null)
+                api.SetToken(token);
+
+            NotifyUserChanged();
+        }
     }
 }

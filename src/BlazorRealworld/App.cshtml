@@ -1,5 +1,5 @@
-﻿@inject AppState AppState
-@inject ApiClient Api
+﻿@inject ApiClient api
+@inject AppState state
 
 <!--
     Configuring this here is temporary. Later we'll move the app config
@@ -10,14 +10,13 @@
 @functions {
     protected override async Task OnInitAsync()
     {
-        Console.WriteLine("App OnInitAsync");
-
         var token = RegisteredFunction.Invoke<string>("getStoredToken");
+
         if (token != null)
         {
-            Api.SetToken(token);
-            AppState.User = await Api.GetUserAsync();
-            Console.WriteLine("App updated User");
+            api.SetToken(token);
+            var user = await api.GetUserAsync();
+            state.UpdateUser(user);
         }
     }
 }

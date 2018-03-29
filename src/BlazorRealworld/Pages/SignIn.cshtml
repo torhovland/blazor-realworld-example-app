@@ -1,8 +1,8 @@
 ﻿@page "/signin"
 @using BlazorRealworld.Model
-    @inject ApiClient Api
-    @inject AppState AppState
-    @inject IUriHelper UriHelper
+    @inject ApiClient api
+    @inject AppState state
+    @inject IUriHelper uriHelper
 
     <div class="auth-page">
         <div class="container page">
@@ -40,14 +40,14 @@
 
     async Task Submit()
     {
-        var response = await Api.SignInAsync(userModel);
+        var response = await api.SignInAsync(userModel);
         var user = response.user;
 
         if (user != null)
         {
-            AppState.User = user;
+            state.UpdateUser(user);
             RegisteredFunction.Invoke<bool>("saveToken", user.token);
-            UriHelper.NavigateTo("/");
+            uriHelper.NavigateTo("/");
         }
         else
         {

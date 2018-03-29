@@ -1,8 +1,8 @@
 ﻿@using System
 @implements ILayoutComponent
-@inject AppState AppState
-@inject ApiClient Api
-@inject IUriHelper UriHelper
+@inject AppState state
+@inject ApiClient api
+@inject IUriHelper uriHelper
 
 <nav class="navbar navbar-light">
     <div class="container">
@@ -13,9 +13,9 @@
                     Home
                 </NavLink>
             </li>
-            @if (AppState.IsSignedIn)
+            @if (state.IsSignedIn)
             {
-                var username = AppState.User?.username;
+                var username = state.User?.username;
 
                 <li class="nav-item">
                     <NavLink class="nav-link" href="/editor">
@@ -71,9 +71,9 @@
 
     void SignOut()
     {
-        Api.ClearToken();
-        AppState.User = null;
+        api.ClearToken();
+        state.UpdateUser(null);
         RegisteredFunction.Invoke<bool>("deleteStoredToken");
-        UriHelper.NavigateTo("/");
+        uriHelper.NavigateTo("/");
     }
 }

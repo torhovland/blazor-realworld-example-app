@@ -28,3 +28,12 @@ describe('Home page', function () {
         })
     })
 })
+
+describe('Sign up', function () {
+    it("Shows error messages", function () {
+        cy.visit('/')
+        cy.contains('Sign up').click()
+        cy.get('[type=submit]').click()
+        cy.contains("can't be blank")
+    })
+})

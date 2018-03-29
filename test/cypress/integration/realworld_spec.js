@@ -12,4 +12,19 @@ describe('Home page', function () {
             cy.contains(title)
         })
     })
+
+    it("Selects a tag", function () {
+        cy.visit('/')
+
+        // Click first tag pill
+        cy.get('.sidebar .tag-pill').first().click()
+
+        cy.get('.sidebar .tag-pill').first().then(($tagPill) => {
+            // Find value of first tag pill
+            const tag = $tagPill.text()
+
+            // Verify that we find the tag hash on the new page
+            cy.get('.ion-pound').parents().first().contains(tag)
+        })
+    })
 })

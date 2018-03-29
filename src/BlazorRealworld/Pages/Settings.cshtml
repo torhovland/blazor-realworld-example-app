@@ -21,7 +21,7 @@
                             <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>
                         </fieldset>
                         <fieldset class="form-group">
-                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" @onchange((bio) => BioChanged(bio))>@userModel.bio</textarea>
+                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" @bind(userModel.bio)>@userModel.bio</textarea>
                         </fieldset>
                         <fieldset class="form-group">
                             <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userModel.email)>
@@ -51,12 +51,6 @@
         await AppState.UntilUserSetAsync();
         userModel = AppState.User.Clone();
         // A refresh is implicitly requested at the end of OnInitAsync().
-    }
-
-    void BioChanged(object bio)
-    {
-        // @bind doesn't support textarea yet
-        userModel.bio = bio.ToString();
     }
 
     async Task Submit()

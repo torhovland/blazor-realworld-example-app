@@ -19,7 +19,7 @@
                             <input type="text" class="form-control" placeholder="What's this article about?" @bind(articleModel.description)>
                         </fieldset>
                         <fieldset class="form-group">
-                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)" @onchange((body) => BodyChanged(body))>@articleModel.body</textarea>
+                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind(articleModel.body)>@articleModel.body</textarea>
                         </fieldset>
                         <fieldset class="form-group">
                             <input type="text" class="form-control" placeholder="Enter tags" @bind(tagString)><div class="tag-list"></div>
@@ -40,12 +40,6 @@
     ArticleModel articleModel = new ArticleModel();
     ArticleResponse response = new ArticleResponse();
     string tagString = "";
-
-    void BodyChanged(object body)
-    {
-        // @bind doesn't support textarea yet
-        articleModel.body = body.ToString();
-    }
 
     async Task Submit()
     {

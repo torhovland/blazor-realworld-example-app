@@ -16,6 +16,7 @@
             @if (state.IsSignedIn)
             {
                 var username = state.User?.username;
+                var image = state.User?.image;
 
                 <li class="nav-item">
                     <NavLink class="nav-link" href="/editor">
@@ -29,7 +30,8 @@
                 </li>
                 <li class="nav-item">
                     <NavLink class="nav-link" href=@("/profile/" + username)>
-                        @@@username
+                        <img src="@image" class="user-pic" />
+                        @username
                     </NavLink>
                 </li>
                 <li class="nav-item">

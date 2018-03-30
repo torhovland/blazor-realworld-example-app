@@ -44,10 +44,11 @@
     {
         articleModel.tagList = tagString.Split(' ');
         response = await api.PostArticleAsync(articleModel);
+        var postedArticle = response?.article;
 
-        if (response.article != null)
+        if (postedArticle != null)
         {
-            uriHelper.NavigateTo("/");
+            uriHelper.NavigateTo($"/article/{postedArticle.slug}");
         }
         else
             // Show errors

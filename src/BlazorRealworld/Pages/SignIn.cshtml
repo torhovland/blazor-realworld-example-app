@@ -20,12 +20,12 @@
                     }
                     <form>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Email" @bind(userModel.email)>
+                            <input class="form-control form-control-lg" type="email" placeholder="Email" @bind(userModel.email)>
                         </fieldset>
                         <fieldset class="form-group">
                             <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userModel.password)>
                         </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                        <button class="btn btn-lg btn-primary pull-xs-right" type="submit" @onclick(async () => await Submit())>
                             Sign in
                         </button>
                     </form>

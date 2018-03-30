@@ -1,5 +1,6 @@
 {
     "baseUrl": "http://localhost:50077",
+    "defaultCommandTimeout": 10000,
     "env": {
         "email": "set privately in cypress.env.json",
         "password": "set privately in cypress.env.json"

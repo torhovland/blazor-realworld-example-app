@@ -111,6 +111,12 @@ namespace BlazorRealworld
                     article = article
                 });
         }
+
+        public async Task<bool> DeleteArticleAsync(string slug)
+        {
+            var response = await _httpClient.DeleteAsync($"{BaseUrl}/articles/{slug}");
+            return response.IsSuccessStatusCode;
+        }
     }
 
     public class UserResponse

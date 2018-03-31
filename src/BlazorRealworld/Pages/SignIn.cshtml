@@ -12,12 +12,7 @@
                     <p class="text-xs-center">
                         <a href="/signup">Need an account?</a>
                     </p>
-                    @if (isError)
-                    {
-                        <ul class="error-messages">
-                            <li>The email address or password is wrong.</li>
-                        </ul>
-                    }
+                    <ErrorMessages Errors=@response.errors />
                     <form>
                         <fieldset class="form-group">
                             <input class="form-control form-control-lg" type="email" placeholder="Email" @bind(userModel.email)>
@@ -36,11 +31,11 @@
 
 @functions {
     UserModel userModel = new UserModel();
-    bool isError = false;
+    UserResponse response = new UserResponse();
 
     async Task Submit()
     {
-        var response = await api.SignInAsync(userModel);
+        response = await api.SignInAsync(userModel);
         var user = response.user;
 
         if (user != null)
@@ -51,7 +46,8 @@
         }
         else
         {
-            isError = true;
+            // Show errors
+            response.errors.emailOrPassword = new string[] { "is wrong" };
             StateHasChanged();
         }
     }

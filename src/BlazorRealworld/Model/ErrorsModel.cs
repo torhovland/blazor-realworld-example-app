@@ -8,5 +8,6 @@
         public string[] title { get; set; }
         public string[] body { get; set; }
         public string[] description { get; set; }
+        public string[] emailOrPassword { get; set; }
     }
 }

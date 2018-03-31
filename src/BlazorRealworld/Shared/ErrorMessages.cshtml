@@ -25,6 +25,10 @@
     {
         <li>The article text @error.</li>
     }
+    @foreach (var error in Errors?.emailOrPassword ?? new string[0])
+    {
+        <li>The email or password @error.</li>
+    }
 </ul>
 
 @functions {

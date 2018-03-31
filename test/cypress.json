@@ -1,6 +1,6 @@
 {
     "baseUrl": "http://localhost:50077",
-    "defaultCommandTimeout": 10000,
+    "defaultCommandTimeout": 15000,
     "env": {
         "apiUrl": "https://conduit.productionready.io/api",
         "email": "set privately in cypress.env.json",

@@ -15,3 +15,9 @@ Blazor.registerFunction('deleteStoredToken', () => {
     console.log("Authentication token has been deleted.");
     return true;
 });
+
+Blazor.registerFunction('showRawHtml', (elementId, html) => {
+    var el = document.getElementById(elementId);
+    el.innerHTML = html;
+    return true;
+});

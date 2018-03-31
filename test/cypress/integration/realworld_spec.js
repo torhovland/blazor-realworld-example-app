@@ -75,7 +75,7 @@ describe('Secured operations', function () {
     })
 
     describe('Editor', function () {
-        it("Submits an article", function () {
+        it.only("Submits an article", function () {
             cy.visit('/')
 
             // Submit article
@@ -83,7 +83,7 @@ describe('Secured operations', function () {
             cy.get('input').eq(0).type('Blazor Realworld test article')
             cy.get('input').eq(1).type('Description')
             cy.get('input').eq(2).type('testing blazor')
-            cy.get('textarea').first().type('Article body')
+            cy.get('textarea').first().type('# Article body')
             cy.contains('Publish Article').click()
             cy.contains('Blazor Realworld test article')
             cy.url().then((articleUrl) => {
@@ -101,6 +101,7 @@ describe('Secured operations', function () {
                 // Check edited article
                 cy.visit(articleUrl)
                 cy.contains('Blazor Realworld edited article')
+                cy.get('.article-content h1').first().should('contain', 'Article body')
 
                 // Delete article
                 cy.contains("Delete Article").click()

@@ -53,8 +53,7 @@
     <div class="container page">
 
         <div class="row article-content">
-            <div class="col-md-12">
-                @article.body
+            <div id="article-body" class="col-md-12">
             </div>
         </div>
 
@@ -147,6 +146,11 @@
     protected override async Task OnInitAsync()
     {
         article = await api.GetArticleAsync(Slug);
+        var articleBody = CommonMark.CommonMarkConverter.Convert(article.body);
+
+        // Until raw HTML is supported in Blazor:
+        // https://github.com/aspnet/Blazor/issues/167
+        RegisteredFunction.Invoke<bool>("showRawHtml", "article-body", articleBody);
     }
 
     async Task DeleteArticle()

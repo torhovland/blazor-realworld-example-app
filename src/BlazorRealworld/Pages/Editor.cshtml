@@ -4,6 +4,8 @@
 @inject ApiClient api
 @inject IUriHelper uriHelper
 
+@if (articleModel != null)
+{
 <div class="editor-page">
     <div class="container page">
         <div class="row">
@@ -34,35 +36,40 @@
         </div>
     </div>
 </div>
+}
 
 @functions
 {
-public string Slug { get; set; }
+    public string Slug { get; set; }
 
-ArticleModel articleModel = new ArticleModel();
-ArticleResponse response = new ArticleResponse();
-string tagString = "";
+    ArticleModel articleModel = null;
+    ArticleResponse response = new ArticleResponse();
+    string tagString = "";
 
-protected override async Task OnInitAsync()
-{
-    if (Slug != null)
+    protected override async Task OnInitAsync()
     {
-        articleModel = await api.GetArticleAsync(Slug);
+        if (Slug == null)
+        {
+            articleModel = new ArticleModel();
+        }
+        else
+        {
+            articleModel = await api.GetArticleAsync(Slug);
+        }
     }
-}
 
-async Task Submit()
-{
-    articleModel.tagList = tagString.Split(' ');
-    response = await api.SaveArticleAsync(articleModel);
-    var postedArticle = response?.article;
-
-    if (postedArticle != null)
+    async Task Submit()
     {
-        uriHelper.NavigateTo($"/article/{postedArticle.slug}");
+        articleModel.tagList = tagString.Split(' ');
+        response = await api.SaveArticleAsync(articleModel);
+        var postedArticle = response?.article;
+
+        if (postedArticle != null)
+        {
+            uriHelper.NavigateTo($"/article/{postedArticle.slug}");
+        }
+        else
+            // Show errors
+            StateHasChanged();
     }
-    else
-        // Show errors
-        StateHasChanged();
-}
 }

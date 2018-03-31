@@ -94,8 +94,10 @@ describe('Secured operations', function () {
                 cy.get('@titleInput').clear()
                 cy.get('@titleInput').type('Blazor Realworld edited article')
                 cy.contains('Publish Article').click()
+
+                // Check edited article
+                cy.visit(articleUrl)
                 cy.contains('Blazor Realworld edited article')
-                cy.url().should('eq', articleUrl)
 
                 // Delete article
                 cy.contains("Delete Article").click()

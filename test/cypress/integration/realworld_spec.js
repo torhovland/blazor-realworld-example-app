@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe('Home page', function () {
     it("Opens an article", function () {
         cy.visit('/')

@@ -32,44 +32,7 @@
                         }
                     </ul>
                 </div>
-                @if (articles == null)
-                {
-                    <div class="article-preview">
-                        Loading articles...
-                    </div>
-                }
-                else if (articles.Count() == 0)
-                {
-                    <div class="article-preview">
-                        No articles here... yet.
-                    </div>
-                }
-                else
-                {
-                    foreach (var article in articles)
-                    {
-                        var date = article.createdAt;
-
-                        <div class="article-preview">
-                            <div class="article-meta">
-                                <a href="profile.html"><img src="@article.author.image" /></a>
-                                <div class="info">
-                                    <a href="/profile/@article.author.username" class="author">@article.author.username</a>
-                                    <span class="date">@String.Format("{0:MMMM} {1}", date, Ordinal(date.Day))</span>
-                                </div>
-                                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                    <i class="ion-heart"></i> @article.favoritesCount
-                                </button>
-                            </div>
-                            <a href="/article/@article.slug" class="preview-link">
-                                <h1>@article.title</h1>
-                                <p>@article.description</p>
-                                <span>Read more...</span>
-                            </a>
-                        </div>
-                    }
-                }
-
+                <ArticleList Articles=@articles />
             </div>
             <div class="col-md-3">
                 <div class="sidebar">
@@ -135,23 +98,8 @@
     {
         selectedTab = SelectedTab.Tag;
         selectedTag = tag;
-        articles = await api.GetArticlesAsync(tag);
+        articles = await api.GetArticlesByTagAsync(tag);
         StateHasChanged();
-    }
-
-    static string Ordinal(int number)
-    {
-        var work = number.ToString();
-        if ((number % 100) == 11 || (number % 100) == 12 || (number % 100) == 13)
-            return work + "th";
-        switch (number % 10)
-        {
-            case 1: work += "st"; break;
-            case 2: work += "nd"; break;
-            case 3: work += "rd"; break;
-            default: work += "th"; break;
-        }
-        return work;
     }
 
     enum SelectedTab

@@ -73,20 +73,31 @@ namespace BlazorRealworld
             return response.profile;
         }
 
-        public async Task<IEnumerable<ArticleModel>> GetArticlesAsync(string tag = null)
+        public async Task<IEnumerable<ArticleModel>> GetArticlesAsync()
         {
-            return await GetArticlesAsync("/articles", tag);
+            return await GetArticlesAsync("/articles", null, null);
+        }
+
+        public async Task<IEnumerable<ArticleModel>> GetArticlesByTagAsync(string tag)
+        {
+            return await GetArticlesAsync("/articles", tag, null);
+        }
+
+        public async Task<IEnumerable<ArticleModel>> GetArticlesByAuthorAsync(string author)
+        {
+            return await GetArticlesAsync("/articles", null, author);
         }
 
         public async Task<IEnumerable<ArticleModel>> GetArticleFeedAsync()
         {
-            return await GetArticlesAsync("/articles/feed");
+            return await GetArticlesAsync("/articles/feed", null, null);
         }
 
-        async Task<IEnumerable<ArticleModel>> GetArticlesAsync(string urlFragment, string tag = null)
+        async Task<IEnumerable<ArticleModel>> GetArticlesAsync(string urlFragment, string tag, string author)
         {
             var tagFilter = tag == null ? "" : $"tag={tag}&";
-            var query = $"?{tagFilter}limit=10&offset=0";
+            var authorFilter = author == null ? "" : $"author={author}&";
+            var query = $"?{tagFilter}{authorFilter}limit=10&offset=0";
             var response = await _httpClient.GetJsonAsync<ArticlesResponse>($"{BaseUrl}{urlFragment}{query}");
             return response.articles;
         }

@@ -4,6 +4,8 @@
     "env": {
         "apiUrl": "https://conduit.productionready.io/api",
         "email": "set privately in cypress.env.json",
-        "password": "set privately in cypress.env.json"
+        "password": "set privately in cypress.env.json",
+        "username": "set privately in cypress.env.json",
+        "token": "set privately in cypress.env.json"
     }
 }

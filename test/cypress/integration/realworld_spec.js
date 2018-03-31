@@ -1,6 +1,9 @@
 /// <reference types="Cypress" />
 
 const apiUrl = Cypress.env('apiUrl')
+const email = Cypress.env('email')
+const password = Cypress.env('password')
+const username = Cypress.env('username')
 const token = Cypress.env('token')
 
 function post(urlFragment, body) {
@@ -56,8 +59,8 @@ describe('Sign in', function () {
     it("Logs in", function () {
         cy.visit('/')
         cy.contains('Sign in').click()
-        cy.get('[type=email]').type(Cypress.env('email'))
-        cy.get('[type=password]').type(Cypress.env('password'))
+        cy.get('[type=email]').type(email)
+        cy.get('[type=password]').type(password)
         cy.get('[type=submit]').click()
 
         // Verify we're back on the Home page
@@ -68,7 +71,7 @@ describe('Sign in', function () {
 describe('Secured operations', function () {
     beforeEach(function () {
         // Sign in
-        window.localStorage.setItem('jwt', Cypress.env('token'));
+        window.localStorage.setItem('jwt', token);
     })
 
     describe('Editor', function () {
@@ -91,21 +94,26 @@ describe('Secured operations', function () {
         })
     })
 
-    describe('Article management', function () {
-        it.only("Deletes an article", function () {
+    describe('Profile', function () {
+        it.only("Shows my name and articles", function () {
             post('/articles', {
                 "article": { "title": "Blazor test article", "description": "Description", "body": "Body", "tagList": ["blazor", "testing"] }
             })
                 .then((response) => {
                     const slug = response.body.article.slug
 
-                    cy.visit(`/article/${slug}`)
+                    cy.visit('/')
+
+                    // Wait until logged in
+                    cy.get(':nth-child(4) > .nav-link')
+
+                    // Go to profile
+                    cy.get('.nav').contains(username).click()
+                    cy.get('.user-info').contains(username)
+                    cy.contains('Blazor test article').click({ force: true })
 
                     // Delete article
                     cy.contains("Delete Article").click()
-
-                    // Verify we're back on the Home page
-                    cy.contains("Global Feed")
                 })
         })
     })

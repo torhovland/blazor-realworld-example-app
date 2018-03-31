@@ -4,11 +4,12 @@
 @inject AppState state
 @inject IUriHelper uriHelper
 
+@if (article != null)
+{
 <div class="article-page">
 
     <div class="banner">
         <div class="container">
-
             <h1>@article.title</h1>
 
             <div class="article-meta">
@@ -136,16 +137,19 @@
     </div>
 
 </div>
+}
 
 @functions
 {
     public string Slug { get; set; }
 
-    ArticleModel article = new ArticleModel();
+    ArticleModel article = null;
 
     protected override async Task OnInitAsync()
     {
         article = await api.GetArticleAsync(Slug);
+        StateHasChanged();
+
         var articleBody = CommonMark.CommonMarkConverter.Convert(article.body);
 
         // Until raw HTML is supported in Blazor:

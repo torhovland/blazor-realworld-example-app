@@ -114,13 +114,18 @@ namespace BlazorRealworld
             return response.tags;
         }
 
-        public async Task<ArticleResponse> PostArticleAsync(ArticleModel article)
+        public async Task<ArticleResponse> SaveArticleAsync(ArticleModel article)
         {
-            return await _httpClient.PostJsonAsync<ArticleResponse>($"{BaseUrl}/articles",
-                new
-                {
-                    article = article
-                });
+            string url = $"{BaseUrl}/articles";
+            object content = new
+            {
+                article = article
+            };
+
+            if (String.IsNullOrEmpty(article.slug))
+                return await _httpClient.PostJsonAsync<ArticleResponse>(url, content);
+            else
+                return await _httpClient.PutJsonAsync<ArticleResponse>($"{url}/{article.slug}", content);
         }
 
         public async Task<bool> DeleteArticleAsync(string slug)

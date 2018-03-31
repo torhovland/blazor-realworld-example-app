@@ -80,24 +80,36 @@ describe('Secured operations', function () {
 
             // Submit article
             cy.contains("New Post").click()
-            cy.get('input').eq(0).type('Blazor Realworld Test Suite')
+            cy.get('input').eq(0).type('Blazor Realworld test article')
             cy.get('input').eq(1).type('Description')
             cy.get('input').eq(2).type('testing blazor')
             cy.get('textarea').first().type('Article body')
             cy.contains('Publish Article').click()
+            cy.contains('Blazor Realworld test article')
+            cy.url().then((articleUrl) => {
+                // Edit article
+                cy.contains("Edit Article").click()
+                cy.get('input').eq(0).as('titleInput')
+                cy.get('@titleInput').should('have.value', 'Blazor Realworld test article')
+                cy.get('@titleInput').clear()
+                cy.get('@titleInput').type('Blazor Realworld edited article')
+                cy.contains('Publish Article').click()
+                cy.contains('Blazor Realworld edited article')
+                cy.url().should('eq', articleUrl)
 
-            // Delete article
-            cy.contains("Delete Article").click()
+                // Delete article
+                cy.contains("Delete Article").click()
 
-            // Verify we're back on the Home page
-            cy.contains("Global Feed")
+                // Verify we're back on the Home page
+                cy.contains("Global Feed")
+            })
         })
     })
 
     describe('Profile', function () {
         it("Shows my name and articles", function () {
             post('/articles', {
-                "article": { "title": "Blazor test article", "description": "Description", "body": "Body", "tagList": ["blazor", "testing"] }
+                "article": { "title": "Blazor Realworld profile test", "description": "Description", "body": "Body", "tagList": ["blazor", "testing"] }
             })
                 .then((response) => {
                     const slug = response.body.article.slug
@@ -110,7 +122,7 @@ describe('Secured operations', function () {
                     // Go to profile
                     cy.get('.nav').contains(username).click()
                     cy.get('.user-info').contains(username)
-                    cy.contains('Blazor test article').click({ force: true })
+                    cy.contains('Blazor Realworld profile test').click({ force: true })
 
                     // Delete article
                     cy.contains("Delete Article").click()

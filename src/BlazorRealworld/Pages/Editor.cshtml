@@ -1,5 +1,6 @@
 ﻿@using BlazorRealworld.Model
 @page "/editor"
+@page "/editor/{Slug}"
 @inject ApiClient api
 @inject IUriHelper uriHelper
 
@@ -36,22 +37,32 @@
 
 @functions
 {
-    ArticleModel articleModel = new ArticleModel();
-    ArticleResponse response = new ArticleResponse();
-    string tagString = "";
+public string Slug { get; set; }
 
-    async Task Submit()
+ArticleModel articleModel = new ArticleModel();
+ArticleResponse response = new ArticleResponse();
+string tagString = "";
+
+protected override async Task OnInitAsync()
+{
+    if (Slug != null)
     {
-        articleModel.tagList = tagString.Split(' ');
-        response = await api.PostArticleAsync(articleModel);
-        var postedArticle = response?.article;
-
-        if (postedArticle != null)
-        {
-            uriHelper.NavigateTo($"/article/{postedArticle.slug}");
-        }
-        else
-            // Show errors
-            StateHasChanged();
+        articleModel = await api.GetArticleAsync(Slug);
     }
+}
+
+async Task Submit()
+{
+    articleModel.tagList = tagString.Split(' ');
+    response = await api.SaveArticleAsync(articleModel);
+    var postedArticle = response?.article;
+
+    if (postedArticle != null)
+    {
+        uriHelper.NavigateTo($"/article/{postedArticle.slug}");
+    }
+    else
+        // Show errors
+        StateHasChanged();
+}
 }

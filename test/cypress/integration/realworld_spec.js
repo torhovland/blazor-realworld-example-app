@@ -53,25 +53,29 @@ describe('Sign in', function () {
     })
 })
 
-describe('Editor', function () {
-    it("Submits an article", function () {
+describe('Secured operations', function () {
+    beforeEach(function () {
         // Sign in
         window.localStorage.setItem('jwt', Cypress.env('token'));
+    })
 
-        cy.visit('/')
+    describe('Editor', function () {
+        it("Submits an article", function () {
+            cy.visit('/')
 
-        // Submit article
-        cy.contains("New Post").click()
-        cy.get('input').eq(0).type('Blazor Realworld Test Suite')
-        cy.get('input').eq(1).type('Description')
-        cy.get('input').eq(2).type('testing blazor')
-        cy.get('textarea').first().type('Article body')
-        cy.contains('Publish Article').click()
+            // Submit article
+            cy.contains("New Post").click()
+            cy.get('input').eq(0).type('Blazor Realworld Test Suite')
+            cy.get('input').eq(1).type('Description')
+            cy.get('input').eq(2).type('testing blazor')
+            cy.get('textarea').first().type('Article body')
+            cy.contains('Publish Article').click()
 
-        // Delete article
-        cy.contains("Delete Article").click()
+            // Delete article
+            cy.contains("Delete Article").click()
 
-        // Verify we're back on the Home page
-        cy.contains("Global Feed")
+            // Verify we're back on the Home page
+            cy.contains("Global Feed")
+        })
     })
 })

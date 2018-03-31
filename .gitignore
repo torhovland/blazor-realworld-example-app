@@ -30,3 +30,4 @@ node_modules/
 /test/cypress/screenshots/
 /test/cypress/videos/
 cypress.env.json
+/test/*.log

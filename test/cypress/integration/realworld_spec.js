@@ -95,6 +95,9 @@ describe('Secured operations', function () {
                 cy.get('@titleInput').type('Blazor Realworld edited article')
                 cy.contains('Publish Article').click()
 
+                // Wait until article has been updated
+                cy.contains('Edit Article')
+
                 // Check edited article
                 cy.visit(articleUrl)
                 cy.contains('Blazor Realworld edited article')

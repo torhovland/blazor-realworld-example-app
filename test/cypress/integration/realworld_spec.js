@@ -53,13 +53,10 @@ describe('Sign in', function () {
 
 describe('Editor', function () {
     it("Submits an article", function () {
-        cy.visit('/')
-
         // Sign in
-        cy.contains('Sign in').click()
-        cy.get('[type=email]').type(Cypress.env('email'))
-        cy.get('[type=password]').type(Cypress.env('password'))
-        cy.get('[type=submit]').click()
+        window.localStorage.setItem('jwt', Cypress.env('token'));
+
+        cy.visit('/')
 
         // Submit article
         cy.contains("New Post").click()

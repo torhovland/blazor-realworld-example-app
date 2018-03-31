@@ -95,7 +95,7 @@ describe('Secured operations', function () {
     })
 
     describe('Profile', function () {
-        it.only("Shows my name and articles", function () {
+        it("Shows my name and articles", function () {
             post('/articles', {
                 "article": { "title": "Blazor test article", "description": "Description", "body": "Body", "tagList": ["blazor", "testing"] }
             })

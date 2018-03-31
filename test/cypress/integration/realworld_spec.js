@@ -105,7 +105,7 @@ describe('Secured operations', function () {
                     cy.visit('/')
 
                     // Wait until logged in
-                    cy.get(':nth-child(4) > .nav-link')
+                    cy.get('.nav-link .user-pic')
 
                     // Go to profile
                     cy.get('.nav').contains(username).click()

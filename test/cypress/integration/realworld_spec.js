@@ -1,5 +1,17 @@
 /// <reference types="Cypress" />
 
+const apiUrl = Cypress.env('apiUrl')
+const token = Cypress.env('token')
+
+function post(urlFragment, body) {
+    return cy.request({
+        "method": "POST",
+        "url": `${apiUrl}${urlFragment}`,
+        "headers": { "Authorization": `Token ${token}` },
+        "body": body
+    })
+}
+
 describe('Home page', function () {
     it("Opens an article", function () {
         cy.visit('/')
@@ -76,6 +88,25 @@ describe('Secured operations', function () {
 
             // Verify we're back on the Home page
             cy.contains("Global Feed")
+        })
+    })
+
+    describe('Article management', function () {
+        it.only("Deletes an article", function () {
+            post('/articles', {
+                "article": { "title": "Blazor test article", "description": "Description", "body": "Body", "tagList": ["blazor", "testing"] }
+            })
+                .then((response) => {
+                    const slug = response.body.article.slug
+
+                    cy.visit(`/article/${slug}`)
+
+                    // Delete article
+                    cy.contains("Delete Article").click()
+
+                    // Verify we're back on the Home page
+                    cy.contains("Global Feed")
+                })
         })
     })
 })

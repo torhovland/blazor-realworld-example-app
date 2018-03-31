@@ -9,8 +9,8 @@
   },
   "scripts": {
     "cypress": "cypress open",
-    "cypress:react": "cross-env CYPRESS_baseUrl=https://react-redux.realworld.io cypress open",
+    "cypress:react": "cross-env CYPRESS_baseUrl=https://react-redux.realworld.io/# cypress open",
     "test": "cypress run",
-    "test:react": "cross-env CYPRESS_baseUrl=https://react-redux.realworld.io cypress run"
+    "test:react": "cross-env CYPRESS_baseUrl=https://react-redux.realworld.io/# cypress run"
   }
 }

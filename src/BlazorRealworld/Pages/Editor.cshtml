@@ -15,19 +15,19 @@
                 <form>
                     <fieldset>
                         <fieldset class="form-group">
-                            <input type="text" class="form-control form-control-lg" placeholder="Article Title" @bind(articleModel.title)>
+                            <input type="text" class="form-control form-control-lg" placeholder="Article Title" bind="@articleModel.title" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="What's this article about?" @bind(articleModel.description)>
+                            <input type="text" class="form-control" placeholder="What's this article about?" bind="@articleModel.description" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind(articleModel.body)>@articleModel.body</textarea>
+                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)" bind="@articleModel.body">@articleModel.body</textarea>
                         </fieldset>
                         <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="Enter tags" @bind(tagString)><div class="tag-list"></div>
+                            <input type="text" class="form-control" placeholder="Enter tags" bind="@tagString" /><div class="tag-list"></div>
                         </fieldset>
-                        <button class="btn btn-lg pull-xs-right btn-primary" type="button" @onclick(async () => await Submit())>
-                            Publish Article
+                        <button class="btn btn-lg pull-xs-right btn-primary" type="button" onclick="@(async () => await Submit())">
+                            Publish
                         </button>
                     </fieldset>
                 </form>

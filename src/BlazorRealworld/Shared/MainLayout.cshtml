@@ -35,7 +35,7 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/" @onclick(SignOut)>
+                    <a class="nav-link" href="/" onclick="@(()=>SignOut())">
                         Sign out
                     </a>
                 </li>
@@ -51,6 +51,11 @@
                     <NavLink class="nav-link" href="/signup">
                         Sign up
                     </NavLink>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="@((e)=> clicktest(e))">
+                        Click test
+                    </a>
                 </li>
             }
         </ul>
@@ -70,7 +75,9 @@
 
 @functions {
     public RenderFragment Body { get; set; }
-
+    void clicktest(UIMouseEventArgs e) {
+        Console.WriteLine("Click testing " + JsonUtil.Serialize(e)); 
+    }
     void SignOut()
     {
         api.ClearToken();

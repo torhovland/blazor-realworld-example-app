@@ -40,8 +40,9 @@ else
 }
 
 @functions {
-    public IEnumerable<ArticleModel> Articles { get; set; }
-    
+    [Parameter]
+    IEnumerable<ArticleModel> Articles { get; set; }
+
     static string Ordinal(int number)
     {
         var work = number.ToString();

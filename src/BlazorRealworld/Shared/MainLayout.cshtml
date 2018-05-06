@@ -1,5 +1,5 @@
 ﻿@using System
-@implements ILayoutComponent
+@inherits BlazorLayoutComponent
 @inject AppState state
 @inject ApiClient api
 @inject IUriHelper uriHelper
@@ -74,15 +74,16 @@
 </footer>
 
 @functions {
-    public RenderFragment Body { get; set; }
-    void clicktest(UIMouseEventArgs e) {
-        Console.WriteLine("Click testing " + JsonUtil.Serialize(e)); 
-    }
-    void SignOut()
-    {
-        api.ClearToken();
-        state.UpdateUser(null);
-        RegisteredFunction.Invoke<bool>("deleteStoredToken");
-        uriHelper.NavigateTo("/");
-    }
+
+void clicktest(UIMouseEventArgs e)
+{
+    Console.WriteLine("Click testing " + JsonUtil.Serialize(e));
+}
+void SignOut()
+{
+    api.ClearToken();
+    state.UpdateUser(null);
+    RegisteredFunction.Invoke<bool>("deleteStoredToken");
+    uriHelper.NavigateTo("/");
+}
 }

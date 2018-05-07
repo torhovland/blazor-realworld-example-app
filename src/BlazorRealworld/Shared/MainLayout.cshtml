@@ -52,11 +52,6 @@
                         Sign up
                     </NavLink>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="@clicktest">
-                        Click test
-                    </a>
-                </li>
             }
         </ul>
     </div>
@@ -74,10 +69,6 @@
 </footer>
 
 @functions {
-    void clicktest(UIMouseEventArgs e)
-    {
-        Console.WriteLine("Click testing " + JsonUtil.Serialize(e));
-    }
     void SignOut()
     {
         api.ClearToken();

@@ -1,5 +1,5 @@
 ﻿@using System
-@implements ILayoutComponent
+@inherits BlazorLayoutComponent
 @inject AppState state
 @inject ApiClient api
 @inject IUriHelper uriHelper
@@ -35,7 +35,7 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/" @onclick(SignOut)>
+                    <a class="nav-link" href="/" onclick="@(SignOut)">
                         Sign out
                     </a>
                 </li>
@@ -69,8 +69,6 @@
 </footer>
 
 @functions {
-    public RenderFragment Body { get; set; }
-
     void SignOut()
     {
         api.ClearToken();

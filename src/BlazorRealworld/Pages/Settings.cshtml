@@ -16,21 +16,21 @@
                 <form>
                     <fieldset>
                         <fieldset class="form-group">
-                            <input class="form-control" type="text" placeholder="URL of profile picture" @bind(userModel.image)>
+                            <input class="form-control" type="text" placeholder="URL of profile picture" bind="@(userModel.image)"/>
                         </fieldset>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Your Name" @bind(userModel.username)>
+                            <input class="form-control form-control-lg" type="text" placeholder="Your Name" bind="@(userModel.username)"/>
                         </fieldset>
                         <fieldset class="form-group">
-                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" @bind(userModel.bio)>@userModel.bio</textarea>
+                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you" bind="@(userModel.bio)">@userModel.bio</textarea>
                         </fieldset>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="email" placeholder="Email" @bind(userModel.email)>
+                            <input class="form-control form-control-lg" type="email" placeholder="Email" bind="@(userModel.email)" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="password" placeholder="Password" @bind(userModel.password)>
+                            <input class="form-control form-control-lg" type="password" placeholder="Password" bind="@(userModel.password)"/>
                         </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right" @onclick(async () => await Submit())>
+                        <button class="btn btn-lg btn-primary pull-xs-right" onclick="@Submit">
                             Update Settings
                         </button>
                     </fieldset>

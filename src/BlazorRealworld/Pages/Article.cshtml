@@ -141,7 +141,8 @@
 
 @functions
 {
-    public string Slug { get; set; }
+    [Parameter]
+    string Slug { get; set; }
 
     ArticleModel article = null;
 
